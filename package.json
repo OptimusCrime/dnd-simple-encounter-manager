@@ -1,6 +1,7 @@
 {
   "name": "dnd-simple-combat-management",
   "version": "1.0.0",
+  "homepage": "/this-is-a-hack",
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",

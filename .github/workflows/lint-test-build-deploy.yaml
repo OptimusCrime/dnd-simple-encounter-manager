@@ -36,9 +36,14 @@ jobs:
       - name: Build
         env:
           TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
+        # This is beyond stupid, but GitHub can not serve static content from the /static directory for some reason...
         run: |
           npm run build
-          mv build docs
+          mkdir docs
+          mv build/index.html docs/index.html
+          sed -i 's/\/this-is-a-hack\/static//g' docs/index.html
+          mv build/static/js docs/js
+          mv build/static/css docs/css
           mv .nojekyll ./docs
 
       - name: Deploy
