@@ -38,10 +38,11 @@ jobs:
           TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
         run: |
           npm run build
-          mv .nojekyll ./build
+          mv build docs
+          mv .nojekyll ./docs
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:
           branch: gh-pages
-          folder: build
+          folder: docs
