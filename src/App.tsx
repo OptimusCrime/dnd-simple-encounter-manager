@@ -1,15 +1,15 @@
+import { Container } from '@mui/material';
 import React from 'react';
 
-import { Container } from '@mui/material';
-
-import { useAppSelector } from './store/hooks';
-import { Page } from './store/reducers/globalReducer';
-import { ReducerNames } from './store/reducers/reducerNames';
 import { Header } from './layout/Header';
-import { Encounters } from './pages/Encounters';
 import { Characters } from './pages/Characters';
 import { EncounterEdit } from './pages/EncounterEdit';
 import { EncounterPlay } from './pages/EncounterPlay';
+import { Encounters } from './pages/Encounters';
+import {Settings} from "./pages/Settings";
+import { useAppSelector } from './store/hooks';
+import { Page } from './store/reducers/globalReducer';
+import { ReducerNames } from './store/reducers/reducerNames';
 
 const Content = () => {
   const { page } = useAppSelector((state) => state[ReducerNames.GLOBAL]);
@@ -21,6 +21,8 @@ const Content = () => {
       return <EncounterEdit />;
     case Page.ENCOUNTER_PLAY:
       return <EncounterPlay />;
+    case Page.SETTINGS:
+      return <Settings />;
     case Page.CHARACTERS:
     default:
       return <Characters />;

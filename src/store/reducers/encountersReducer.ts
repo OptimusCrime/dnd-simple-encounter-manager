@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ReducerNames } from './reducerNames';
-import { getItem } from '../../utilities/localStorage';
 import { calculateHealth } from '../../utilities/calculateHealth';
+import { getItem } from '../../utilities/localStorage';
+import { ReducerNames } from './reducerNames';
 
 interface AddMonsterPayload {
   name: string;

@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { listenerMiddleware } from './listenerMiddleware';
-import { ReducerNames } from './reducers/reducerNames';
-import globalReducer from './reducers/globalReducer';
 import charactersReducer from './reducers/charactersReducer';
-import encountersReducer from './reducers/encountersReducer';
 import encounterPlayReducer from './reducers/encounterPlayReducer';
+import encountersReducer from './reducers/encountersReducer';
+import globalReducer from './reducers/globalReducer';
+import { ReducerNames } from './reducers/reducerNames';
 
 export const store = configureStore({
   reducer: {

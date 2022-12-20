@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ReducerNames } from './reducerNames';
+import { InitiativeEntityState } from '../../pages/EncounterPlay.types';
 import { getItem } from '../../utilities/localStorage';
 import { Encounter } from './encountersReducer';
-import { InitiativeEntityState } from '../../pages/EncounterPlay.types';
+import { ReducerNames } from './reducerNames';
 
 export enum Phase {
   INITIATIVE = 'initiative',

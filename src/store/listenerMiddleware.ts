@@ -1,7 +1,7 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 
-import { ReducerNames } from './reducers/reducerNames';
 import { setItem } from '../utilities/localStorage';
+import { ReducerNames } from './reducers/reducerNames';
 
 export const listenerMiddleware = createListenerMiddleware();
 

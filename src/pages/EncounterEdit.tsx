@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { Delete } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -14,27 +13,28 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { Delete } from '@mui/icons-material';
+import React from 'react';
+
+import { Content } from '../layout/Content';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { ReducerNames } from '../store/reducers/reducerNames';
 import {
+  addMonster,
   addPlayerCharacters,
   removeEntity,
   selectEncounter,
-  updateEncounterName,
   setFinishedValue,
   setReadyValue,
-  addMonster,
+  updateEncounterName,
 } from '../store/reducers/encountersReducer';
-import { Content } from '../layout/Content';
 import { Page, setPage } from '../store/reducers/globalReducer';
+import { ReducerNames } from '../store/reducers/reducerNames';
 
 export const EncounterEdit = () => {
-  const encounterNameInputFieldRef = React.useRef<undefined | any>(null);
+  const encounterNameInputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
-  const monsterNameInputFieldRef = React.useRef<undefined | any>(null);
-  const monsterStartHealthInputFieldRef = React.useRef<undefined | any>(null);
-  const monsterCloneInputFieldRef = React.useRef<undefined | any>(null);
+  const monsterNameInputFieldRef = React.useRef<null | HTMLInputElement>(null);
+  const monsterStartHealthInputFieldRef = React.useRef<null | HTMLInputElement>(null);
+  const monsterCloneInputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
   const { encounters, selectedEncounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
   const { characters } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
@@ -55,21 +55,25 @@ export const EncounterEdit = () => {
   const monsters = entities.filter((entity) => !entity.isPlayerCharacter);
 
   const updateEncounterNameCallback = () => {
-    dispatch(updateEncounterName(encounterNameInputFieldRef.current.value));
+    if (encounterNameInputFieldRef?.current) {
+      dispatch(updateEncounterName(encounterNameInputFieldRef.current.value));
+    }
   };
 
   const addMonsterCallback = () => {
-    dispatch(
-      addMonster({
-        name: monsterNameInputFieldRef.current.value,
-        startHealth: monsterStartHealthInputFieldRef.current.value,
-        clones: parseInt(monsterCloneInputFieldRef.current.value),
-      }),
-    );
+    if (monsterNameInputFieldRef?.current && monsterStartHealthInputFieldRef?.current && monsterCloneInputFieldRef?.current) {
+      dispatch(
+        addMonster({
+          name: monsterNameInputFieldRef.current.value,
+          startHealth: monsterStartHealthInputFieldRef.current.value,
+          clones: parseInt(monsterCloneInputFieldRef.current.value),
+        }),
+      );
 
-    monsterNameInputFieldRef.current.value = '';
-    monsterStartHealthInputFieldRef.current.value = '';
-    monsterCloneInputFieldRef.current.value = '1';
+      monsterNameInputFieldRef.current.value = '';
+      monsterStartHealthInputFieldRef.current.value = '';
+      monsterCloneInputFieldRef.current.value = '1';
+    }
   };
 
   return (

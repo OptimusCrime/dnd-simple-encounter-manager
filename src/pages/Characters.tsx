@@ -1,22 +1,23 @@
+import { Delete } from '@mui/icons-material';
+import { Box, Button,IconButton, List, ListItem, TextField, Typography } from '@mui/material';
 import React from 'react';
 
-import { Delete } from '@mui/icons-material';
-import { Box, ListItem, List, Typography, IconButton, TextField, Button } from '@mui/material';
-
+import { Content } from '../layout/Content';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { addCharacter, removeCharacter } from '../store/reducers/charactersReducer';
 import { ReducerNames } from '../store/reducers/reducerNames';
-import { Content } from '../layout/Content';
 
 export const Characters = () => {
   const { characters } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
   const dispatch = useAppDispatch();
 
-  const inputFieldRef = React.useRef<undefined | any>(null);
+  const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
   const addCharacterCallback = () => {
-    dispatch(addCharacter(inputFieldRef.current.value));
-    inputFieldRef.current.value = '';
+    if (inputFieldRef?.current) {
+      dispatch(addCharacter(inputFieldRef.current.value));
+      inputFieldRef.current.value = '';
+    }
   };
 
   return (

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ReducerNames } from './reducerNames';
 import { getItem } from '../../utilities/localStorage';
+import { ReducerNames } from './reducerNames';
 
 interface CharactersState {
   characters: string[];

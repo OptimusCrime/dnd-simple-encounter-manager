@@ -1,24 +1,25 @@
+import { Delete, PlayCircle } from '@mui/icons-material';
+import { Box, Button,IconButton, List, ListItem, TextField, Typography } from '@mui/material';
 import React from 'react';
 
-import { Delete, PlayCircle } from '@mui/icons-material';
-import { Box, ListItem, List, Typography, IconButton, TextField, Button } from '@mui/material';
-
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { ReducerNames } from '../store/reducers/reducerNames';
-import { addEncounter, removeEncounter, selectEncounter } from '../store/reducers/encountersReducer';
 import { Content } from '../layout/Content';
-import { Page, setPage } from '../store/reducers/globalReducer';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setPlayEncounter } from '../store/reducers/encounterPlayReducer';
+import { addEncounter, removeEncounter, selectEncounter } from '../store/reducers/encountersReducer';
+import { Page, setPage } from '../store/reducers/globalReducer';
+import { ReducerNames } from '../store/reducers/reducerNames';
 
 export const Encounters = () => {
   const { encounters } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
   const dispatch = useAppDispatch();
 
-  const inputFieldRef = React.useRef<undefined | any>(null);
+  const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
   const addEncounterCallback = () => {
-    dispatch(addEncounter(inputFieldRef.current.value));
-    inputFieldRef.current.value = '';
+    if (inputFieldRef?.current) {
+      dispatch(addEncounter(inputFieldRef.current.value));
+      inputFieldRef.current.value = '';
+    }
   };
 
   const sortedEncounters = encounters.slice().sort((a, b) => {

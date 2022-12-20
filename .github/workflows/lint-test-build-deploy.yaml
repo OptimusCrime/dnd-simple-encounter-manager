@@ -38,6 +38,7 @@ jobs:
           TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
         run: |
           npm run build
+          mv .nojekyll ./build
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.7

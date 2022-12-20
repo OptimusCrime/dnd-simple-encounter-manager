@@ -1,6 +1,6 @@
 const createStateKey = (key: string): string => `state_${key}`;
 
-export const setItem = (key: string, payload: any) => {
+export const setItem = (key: string, payload: object) => {
   if (!window.localStorage) {
     // What to do? Don't know.
   }

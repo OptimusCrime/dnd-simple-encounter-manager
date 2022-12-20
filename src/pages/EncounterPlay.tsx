@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-
+import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -15,11 +14,10 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
+import React, { useState } from 'react';
 
+import { Content } from '../layout/Content';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { ReducerNames } from '../store/reducers/reducerNames';
-import { Page, setPage } from '../store/reducers/globalReducer';
 import {
   beginEncounter,
   Condition,
@@ -29,8 +27,9 @@ import {
   updateCondition,
   updateHealth,
 } from '../store/reducers/encounterPlayReducer';
-import { Content } from '../layout/Content';
 import { Encounter, Entity } from '../store/reducers/encountersReducer';
+import { Page, setPage } from '../store/reducers/globalReducer';
+import { ReducerNames } from '../store/reducers/reducerNames';
 import { InitiativeEntityState } from './EncounterPlay.types';
 
 enum MoveDirection {

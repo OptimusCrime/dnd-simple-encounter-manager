@@ -1,13 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { ReducerNames } from './reducerNames';
 import { getItem } from '../../utilities/localStorage';
+import { ReducerNames } from './reducerNames';
 
 export enum Page {
   ENCOUNTERS = 'encounters',
   ENCOUNTER_EDIT = 'encounter_edit',
   ENCOUNTER_PLAY = 'encounter_play',
   CHARACTERS = 'characters',
+  SETTINGS = 'settings'
 }
 
 interface GlobalState {
