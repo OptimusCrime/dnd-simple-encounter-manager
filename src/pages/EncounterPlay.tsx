@@ -45,7 +45,6 @@ const mapEntityToInitiativeState = (entity: Entity, index: number): InitiativeEn
     name,
     order: index,
     startHealth,
-    physicalIdentifier: '',
     isPlayerCharacter,
     isSurprised: false,
     inPlay: true,
@@ -150,25 +149,27 @@ const EncounterPlayPhaseInitiative = ({ encounter }: { encounter: Encounter }) =
     dispatch(beginEncounter(state));
   };
 
+  const entitiesNum = sortedState.length;
+
   return (
     <>
       <Content title={`Decide initiative: ${name}`}>
         <Box
           sx={{
             backgroundColor: '#fff',
-            mt: 1,
             p: 1,
-            pt: 2,
+            pb: 0,
+            pt: 0,
           }}
         >
           <Box>
-            <List>
-              {sortedState.map((entity) => (
+            <List sx={{ pb: 1 }}>
+              {sortedState.map((entity, idx) => (
                 <ListItem
                   key={entity.id}
                   sx={{
                     backgroundColor: '#eee',
-                    mb: 1,
+                    mb: idx + 1 === entitiesNum ? 0 : 1,
                     width: '100%',
                     borderRadius: '4px 4px',
                   }}
@@ -223,7 +224,8 @@ const EncounterPlayPhaseInitiative = ({ encounter }: { encounter: Encounter }) =
                           label="Initiative"
                           defaultValue=""
                           inputProps={{ tabIndex: entity.order + 100 }}
-                          variant="standard"
+                          InputLabelProps={{ shrink: true }}
+                          size="small"
                           onChange={(event) => {
                             const value = event.target.value;
                             if (/^[0-9]+$/.test(value)) {
@@ -238,31 +240,6 @@ const EncounterPlayPhaseInitiative = ({ encounter }: { encounter: Encounter }) =
                           }}
                         />
                       </Stack>
-
-                      <Divider orientation="vertical" flexItem />
-
-                      {!entity.isPlayerCharacter && (
-                        <Stack
-                          direction="column"
-                          alignItems="flex-start"
-                          justifyContent="space-between"
-                          spacing={1}
-                          sx={{ alignSelf: 'center' }}
-                        >
-                          <TextField
-                            label="Physical identifier"
-                            defaultValue=""
-                            inputProps={{ tabIndex: -1 }}
-                            variant="standard"
-                            onChange={(event) => {
-                              const value = event.target.value;
-                              updateState(entity.id, {
-                                physicalIdentifier: value,
-                              });
-                            }}
-                          />
-                        </Stack>
-                      )}
 
                       <Divider orientation="vertical" flexItem />
 
@@ -326,7 +303,7 @@ const EncounterPlayPhaseInitiative = ({ encounter }: { encounter: Encounter }) =
         </Box>
         <Box
           sx={{
-            mt: 2,
+            mt: 1,
             display: 'flex',
             justifyContent: 'space-between',
           }}
@@ -425,8 +402,7 @@ const EncounterPlayPhasePlay = ({ encounter }: { encounter: Encounter }) => {
                       spacing={1}
                     >
                       <Box sx={{ minWidth: '15rem' }}>
-                        <strong>{entity.initiative + 1}.</strong> {entity.name}{' '}
-                        {entity.physicalObject.length === 0 ? '' : ` (${entity.physicalObject})`}
+                        <strong>{entity.initiative + 1}.</strong> {entity.name}
                       </Box>
                       {entity.isSurprised && (
                         <>

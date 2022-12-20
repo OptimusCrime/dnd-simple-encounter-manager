@@ -17,6 +17,7 @@ import React from 'react';
 
 import { Content } from '../layout/Content';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { setPlayEncounter } from '../store/reducers/encounterPlayReducer';
 import {
   addMonster,
   addPlayerCharacters,
@@ -60,8 +61,20 @@ export const EncounterEdit = () => {
     }
   };
 
+  const startEncounterCallback = () => {
+    if (currentEncounter) {
+      dispatch(setReadyValue(true));
+      dispatch(setPlayEncounter(currentEncounter));
+      dispatch(setPage(Page.ENCOUNTER_PLAY));
+    }
+  };
+
   const addMonsterCallback = () => {
-    if (monsterNameInputFieldRef?.current && monsterStartHealthInputFieldRef?.current && monsterCloneInputFieldRef?.current) {
+    if (
+      monsterNameInputFieldRef?.current &&
+      monsterStartHealthInputFieldRef?.current &&
+      monsterCloneInputFieldRef?.current
+    ) {
       dispatch(
         addMonster({
           name: monsterNameInputFieldRef.current.value,
@@ -82,18 +95,21 @@ export const EncounterEdit = () => {
         <Box
           sx={{
             backgroundColor: '#fff',
-            mt: 1,
             p: 1,
-            pt: 2,
+            pb: 0,
+            pt: 0,
           }}
         >
-          <Stack direction="row" alignItems="center" spacing={1}>
+          <Stack direction="row" alignItems="center">
             <TextField
               label="Encounter name"
               defaultValue={name}
-              variant="standard"
+              size="small"
+              InputLabelProps={{ shrink: true }}
               sx={{
                 minWidth: '15rem',
+                m: 1,
+                ml: 0,
               }}
               inputRef={encounterNameInputFieldRef}
               onKeyUp={(event) => {
@@ -107,6 +123,7 @@ export const EncounterEdit = () => {
               variant="contained"
               onClick={updateEncounterNameCallback}
               sx={{
+                m: 1,
                 alignSelf: 'center',
               }}
             >
@@ -118,6 +135,9 @@ export const EncounterEdit = () => {
                 control={
                   <Switch
                     checked={ready}
+                    sx={{
+                      m: 1,
+                    }}
                     onChange={(event) => {
                       dispatch(setReadyValue(event.target.checked));
                     }}
@@ -132,6 +152,9 @@ export const EncounterEdit = () => {
                 control={
                   <Switch
                     checked={finished}
+                    sx={{
+                      m: 1,
+                    }}
                     onChange={(event) => {
                       dispatch(setFinishedValue(event.target.checked));
                     }}
@@ -140,25 +163,108 @@ export const EncounterEdit = () => {
                 label="Finished"
               />
             </FormGroup>
+            <Button
+              variant="contained"
+              onClick={startEncounterCallback}
+              sx={{
+                m: 1,
+                ml: 'auto',
+              }}
+            >
+              Start
+            </Button>
           </Stack>
+        </Box>
+      </Content>
+      <Content title={`Monsters (${monsters.length})`}>
+        <Box
+          sx={{
+            backgroundColor: '#fff',
+            p: 1,
+            pb: 0,
+            pt: 0,
+          }}
+        >
+          <Box>
+            {monsters.length === 0 ? (
+              <Typography variant="body1">No monsters added.</Typography>
+            ) : (
+              <List sx={{ p: 0 }}>
+                {monsters.map((monster) => (
+                  <ListItem
+                    sx={{ pl: 0 }}
+                    key={monster.id}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => {
+                          dispatch(removeEntity(monster.id));
+                        }}
+                      >
+                        <Delete />
+                      </IconButton>
+                    }
+                  >
+                    {`${monster.name} (${monster.startHealth} HP)`}
+                  </ListItem>
+                ))}
+              </List>
+            )}
+          </Box>
+          <Divider />
+          <Box>
+            <Stack direction="row" alignItems="center">
+              <TextField
+                label="Monster name"
+                size="small"
+                sx={{ m: 1, ml: 0 }}
+                inputRef={monsterNameInputFieldRef}
+                InputLabelProps={{ shrink: true }}
+              />
+              <Divider orientation="vertical" flexItem />
+              <TextField
+                label="Monster start health"
+                size="small"
+                sx={{ m: 1 }}
+                inputRef={monsterStartHealthInputFieldRef}
+                InputLabelProps={{ shrink: true }}
+              />
+              <Divider orientation="vertical" flexItem />
+              <TextField
+                label="Clone number"
+                defaultValue={1}
+                size="small"
+                sx={{ m: 1 }}
+                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                inputRef={monsterCloneInputFieldRef}
+                InputLabelProps={{ shrink: true }}
+              />
+              <Divider orientation="vertical" flexItem />
+              <Button variant="contained" onClick={addMonsterCallback} sx={{ m: 1 }}>
+                Add monster
+              </Button>
+            </Stack>
+          </Box>
         </Box>
       </Content>
       <Content title={`Player characters (${playerCharacters.length})`}>
         <Box
           sx={{
             backgroundColor: '#fff',
-            mt: 1,
             p: 1,
-            pt: 2,
+            pb: 0,
+            pt: 0,
           }}
         >
           <Box>
             {playerCharacters.length === 0 ? (
               <Typography variant="body1">No player characters added.</Typography>
             ) : (
-              <List>
+              <List sx={{ p: 0 }}>
                 {playerCharacters.map((playerCharacter) => (
                   <ListItem
+                    sx={{ pl: 0 }}
                     key={playerCharacter.id}
                     secondaryAction={
                       <IconButton
@@ -179,67 +285,29 @@ export const EncounterEdit = () => {
             )}
           </Box>
           <Divider />
-          <Box sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={() => dispatch(addPlayerCharacters(characters))}>
+          <Box
+            sx={{
+              mt: 1,
+              pb: 1,
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                if (selectedEncounter) {
+                  dispatch(
+                    addPlayerCharacters({
+                      encounter: selectedEncounter,
+                      players: characters,
+                    }),
+                  );
+                }
+              }}
+            >
               Add player characters
             </Button>
           </Box>
         </Box>
-        <Content title={`Monsters (${monsters.length})`}>
-          <Box
-            sx={{
-              backgroundColor: '#fff',
-              mt: 1,
-              p: 1,
-              pt: 2,
-            }}
-          >
-            <Box>
-              {monsters.length === 0 ? (
-                <Typography variant="body1">No monsters added.</Typography>
-              ) : (
-                <List>
-                  {monsters.map((monster) => (
-                    <ListItem
-                      key={monster.id}
-                      secondaryAction={
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => {
-                            dispatch(removeEntity(monster.id));
-                          }}
-                        >
-                          <Delete />
-                        </IconButton>
-                      }
-                    >
-                      {`${monster.name} (${monster.startHealth} HP)`}
-                    </ListItem>
-                  ))}
-                </List>
-              )}
-            </Box>
-            <Divider />
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <TextField label="Monster name" variant="standard" inputRef={monsterNameInputFieldRef} />
-              <Divider orientation="vertical" flexItem />
-              <TextField label="Monster start health" variant="standard" inputRef={monsterStartHealthInputFieldRef} />
-              <Divider orientation="vertical" flexItem />
-              <TextField
-                label="Clone number"
-                defaultValue={1}
-                variant="standard"
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                inputRef={monsterCloneInputFieldRef}
-              />
-              <Divider orientation="vertical" flexItem />
-              <Button variant="contained" onClick={addMonsterCallback}>
-                Add monster
-              </Button>
-            </Stack>
-          </Box>
-        </Content>
       </Content>
     </>
   );

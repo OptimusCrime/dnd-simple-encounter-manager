@@ -32,7 +32,6 @@ export interface PlayEntity {
   id: number;
   name: string;
   initiative: number;
-  physicalObject: string;
   startHealth: number | null;
   currentHealth: number | null;
   isPlayerCharacter: boolean;
@@ -111,7 +110,6 @@ const encounterPlayReducer = createSlice({
           id: entity.id,
           name: getName(entity, action.payload),
           initiative: entity.order,
-          physicalObject: entity.physicalIdentifier,
           startHealth: entity.startHealth,
           currentHealth: entity.startHealth,
           isPlayerCharacter: entity.isPlayerCharacter,

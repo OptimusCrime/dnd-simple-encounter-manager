@@ -22,6 +22,10 @@ const pages: { text: string; identifier: Page }[] = [
     text: 'Characters',
     identifier: Page.CHARACTERS,
   },
+  {
+    text: 'Settings',
+    identifier: Page.SETTINGS,
+  },
 ];
 
 export const Header = () => {

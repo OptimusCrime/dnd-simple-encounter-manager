@@ -6,7 +6,7 @@ import { Characters } from './pages/Characters';
 import { EncounterEdit } from './pages/EncounterEdit';
 import { EncounterPlay } from './pages/EncounterPlay';
 import { Encounters } from './pages/Encounters';
-import {Settings} from "./pages/Settings";
+import { Settings } from './pages/Settings';
 import { useAppSelector } from './store/hooks';
 import { Page } from './store/reducers/globalReducer';
 import { ReducerNames } from './store/reducers/reducerNames';
@@ -35,7 +35,8 @@ export const App = () => {
       <Header />
       <Container
         sx={{
-          mt: '2rem',
+          mt: 2,
+          pb: 5,
         }}
       >
         <Content />

@@ -1,5 +1,5 @@
 import { Delete } from '@mui/icons-material';
-import { Box, Button,IconButton, List, ListItem, TextField, Typography } from '@mui/material';
+import { Box, Button, Divider, IconButton, List, ListItem, Stack, TextField, Typography } from '@mui/material';
 import React from 'react';
 
 import { Content } from '../layout/Content';
@@ -14,28 +14,30 @@ export const Characters = () => {
   const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
   const addCharacterCallback = () => {
-    if (inputFieldRef?.current) {
+    if (inputFieldRef?.current && inputFieldRef.current?.value.length > 0) {
       dispatch(addCharacter(inputFieldRef.current.value));
       inputFieldRef.current.value = '';
     }
   };
 
   return (
-    <Content title="Characters">
-      <>
+    <>
+      <Content title="Characters">
         <Box
           sx={{
             backgroundColor: '#fff',
-            mt: 1,
             p: 1,
+            pb: 0,
+            pt: 0,
           }}
         >
           {characters.length === 0 ? (
             <Typography variant="body1">No characters added.</Typography>
           ) : (
-            <List>
+            <List sx={{ p: 0 }}>
               {characters.map((character) => (
                 <ListItem
+                  sx={{ pl: 0, pr: 0 }}
                   key={character}
                   secondaryAction={
                     <IconButton
@@ -55,32 +57,36 @@ export const Characters = () => {
             </List>
           )}
         </Box>
+      </Content>
+      <Content title="Add character">
         <Box
           sx={{
-            mt: 2,
             backgroundColor: '#fff',
             p: 1,
+            pb: 0,
+            pt: 0,
           }}
         >
-          <Box>
+          <Stack direction="row" alignItems="center">
             <TextField
               label="Character name"
-              variant="standard"
+              size="small"
+              sx={{ m: 1, ml: 0 }}
               inputRef={inputFieldRef}
               onKeyUp={(event) => {
                 if (event.key.toLowerCase() === 'enter') {
                   addCharacterCallback();
                 }
               }}
+              InputLabelProps={{ shrink: true }}
             />
-          </Box>
-          <Box sx={{ mt: 2 }}>
-            <Button variant="contained" onClick={addCharacterCallback}>
+            <Divider orientation="vertical" flexItem />
+            <Button variant="contained" onClick={addCharacterCallback} sx={{ m: 1 }}>
               Add character
             </Button>
-          </Box>
+          </Stack>
         </Box>
-      </>
-    </Content>
+      </Content>
+    </>
   );
 };

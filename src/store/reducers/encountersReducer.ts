@@ -86,14 +86,14 @@ const encountersReducer = createSlice({
     selectEncounter(state, action: PayloadAction<number | null>) {
       state.selectedEncounter = action.payload;
     },
-    addEncounter(state, action: PayloadAction<string>) {
+    addEncounter(state, action: PayloadAction<{ name: string; players: string[] }>) {
       const maxId = Math.max(-1, ...state.encounters.map((encounter) => encounter.id));
       state.encounters.push({
         id: maxId + 1,
-        name: action.payload,
+        name: action.payload.name,
         ready: false,
         finished: false,
-        entities: [],
+        entities: mapPlayersToEntities([], action.payload.players),
       });
     },
     removeEncounter(state, action: PayloadAction<number>) {
@@ -123,15 +123,15 @@ const encountersReducer = createSlice({
         };
       });
     },
-    addPlayerCharacters(state, action: PayloadAction<string[]>) {
+    addPlayerCharacters(state, action: PayloadAction<{ encounter: number; players: string[] }>) {
       state.encounters = state.encounters.map((encounter) => {
-        if (state.selectedEncounter !== encounter.id) {
+        if (encounter.id !== action.payload.encounter) {
           return encounter;
         }
 
         return {
           ...encounter,
-          entities: [...encounter.entities, ...mapPlayersToEntities(encounter.entities, action.payload)],
+          entities: [...encounter.entities, ...mapPlayersToEntities(encounter.entities, action.payload.players)],
         };
       });
     },

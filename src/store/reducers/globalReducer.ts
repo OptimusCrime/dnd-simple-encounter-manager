@@ -8,7 +8,7 @@ export enum Page {
   ENCOUNTER_EDIT = 'encounter_edit',
   ENCOUNTER_PLAY = 'encounter_play',
   CHARACTERS = 'characters',
-  SETTINGS = 'settings'
+  SETTINGS = 'settings',
 }
 
 interface GlobalState {
