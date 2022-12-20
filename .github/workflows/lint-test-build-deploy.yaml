@@ -12,12 +12,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.3.1
 
-      - name: Install and Build
+      - name: Install
         env:
           TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
         run: |
           npm ci
+
+      - name: Typecheck
+        env:
+          TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
+        run: |
+          npm run typecheck
+
+      - name: Lint
+        run: |
+          npm run lint
+          npm run prettier
+
+      - name: Test
+        run: |
+          npm run test
+
+      - name: Build
+        env:
+          TOKEN_HEADER_NAME: '${{ secrets.TOKEN_HEADER_NAME }}'
+        run: |
           npm run build
+
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@4.1.7
         with:

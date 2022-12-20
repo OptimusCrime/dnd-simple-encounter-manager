@@ -6,7 +6,7 @@ export const setItem = (key: string, payload: any) => {
   }
 
   window.localStorage.setItem(createStateKey(key), JSON.stringify(payload));
-}
+};
 
 export const getItem = <T>(key: string): T | null => {
   if (!window.localStorage) {
@@ -20,4 +20,4 @@ export const getItem = <T>(key: string): T | null => {
   }
 
   return JSON.parse(content) as T;
-}
+};

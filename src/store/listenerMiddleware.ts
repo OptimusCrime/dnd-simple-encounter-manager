@@ -1,9 +1,9 @@
-import { createListenerMiddleware } from '@reduxjs/toolkit'
+import { createListenerMiddleware } from '@reduxjs/toolkit';
 
-import {ReducerNames} from "./reducers/reducerNames";
-import {setItem} from "../utilities/localStorage";
+import { ReducerNames } from './reducers/reducerNames';
+import { setItem } from '../utilities/localStorage';
 
-export const listenerMiddleware = createListenerMiddleware()
+export const listenerMiddleware = createListenerMiddleware();
 
 listenerMiddleware.startListening({
   predicate: (_, __, ___) => {
@@ -23,4 +23,4 @@ listenerMiddleware.startListening({
       }
     }
   },
-})
+});

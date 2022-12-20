@@ -1,12 +1,12 @@
-import {calculateHealth} from "../calculateHealth";
+import { calculateHealth } from '../calculateHealth';
 
 beforeEach(() => {
-    jest.spyOn(global.Math, 'random').mockReturnValue(0.223456789);
+  jest.spyOn(global.Math, 'random').mockReturnValue(0.223456789);
 });
 
 afterEach(() => {
-    jest.spyOn(global.Math, 'random').mockRestore();
-})
+  jest.spyOn(global.Math, 'random').mockRestore();
+});
 
 describe('calculateHealth', () => {
   test('Non-expressions are handled correctly', async () => {
@@ -24,11 +24,11 @@ describe('calculateHealth', () => {
 
   test('Dice throw with modifier is simulated correctly', async () => {
     // According to mock, each dice throw returns 2
-    expect(calculateHealth('10d6 + 17')).toBe((2 * 10) + 17);
+    expect(calculateHealth('10d6 + 17')).toBe(2 * 10 + 17);
   });
 
   test('Multiple dice throws with modifiers is simulated correctly', async () => {
     // According to mock, each dice throw returns 2
-    expect(calculateHealth('10d6 + 17 - 2d6 + 1')).toBe((2 * 10) + 17 - (2 * 2) + 1);
+    expect(calculateHealth('10d6 + 17 - 2d6 + 1')).toBe(2 * 10 + 17 - 2 * 2 + 1);
   });
 });

@@ -2,17 +2,17 @@ import React from 'react';
 
 import { Container } from '@mui/material';
 
-import {useAppSelector} from "./store/hooks";
-import {Page} from "./store/reducers/globalReducer";
-import {ReducerNames} from "./store/reducers/reducerNames";
-import {Header} from "./layout/Header";
-import {Encounters} from "./pages/Encounters";
-import {Characters} from "./pages/Characters";
-import {EncounterEdit} from "./pages/EncounterEdit";
-import {EncounterPlay} from "./pages/EncounterPlay";
+import { useAppSelector } from './store/hooks';
+import { Page } from './store/reducers/globalReducer';
+import { ReducerNames } from './store/reducers/reducerNames';
+import { Header } from './layout/Header';
+import { Encounters } from './pages/Encounters';
+import { Characters } from './pages/Characters';
+import { EncounterEdit } from './pages/EncounterEdit';
+import { EncounterPlay } from './pages/EncounterPlay';
 
 const Content = () => {
-  const { page } = useAppSelector(state => state[ReducerNames.GLOBAL]);
+  const { page } = useAppSelector((state) => state[ReducerNames.GLOBAL]);
 
   switch (page) {
     case Page.ENCOUNTERS:
@@ -20,12 +20,12 @@ const Content = () => {
     case Page.ENCOUNTER_EDIT:
       return <EncounterEdit />;
     case Page.ENCOUNTER_PLAY:
-      return <EncounterPlay />
+      return <EncounterPlay />;
     case Page.CHARACTERS:
     default:
       return <Characters />;
   }
-}
+};
 
 export const App = () => {
   return (
@@ -33,11 +33,11 @@ export const App = () => {
       <Header />
       <Container
         sx={{
-          mt: '2rem'
+          mt: '2rem',
         }}
       >
         <Content />
       </Container>
     </div>
   );
-}
+};

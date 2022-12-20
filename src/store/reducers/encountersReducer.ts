@@ -1,8 +1,8 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {ReducerNames} from "./reducerNames";
-import {getItem} from "../../utilities/localStorage";
-import {calculateHealth} from "../../utilities/calculateHealth";
+import { ReducerNames } from './reducerNames';
+import { getItem } from '../../utilities/localStorage';
+import { calculateHealth } from '../../utilities/calculateHealth';
 
 interface AddMonsterPayload {
   name: string;
@@ -10,21 +10,21 @@ interface AddMonsterPayload {
   clones: number;
 }
 
-const findMaxId = (entities: Entity[]): number => Math.max(-1, ...entities.map(entity => entity.id));
+const findMaxId = (entities: Entity[]): number => Math.max(-1, ...entities.map((entity) => entity.id));
 
 const mapPlayersToEntities = (entities: Entity[], players: string[]): Entity[] => {
-  let maxId = findMaxId(entities)
+  let maxId = findMaxId(entities);
 
   return players.map((player, index) => ({
     id: maxId + 1 + index,
     name: player,
     isPlayerCharacter: true,
-    startHealth: null
+    startHealth: null,
   }));
-}
+};
 
 const mapMonsterToEntity = (entities: Entity[], monster: AddMonsterPayload): Entity[] => {
-  let maxId = findMaxId(entities)
+  let maxId = findMaxId(entities);
 
   const { name, startHealth, clones } = monster;
 
@@ -40,7 +40,7 @@ const mapMonsterToEntity = (entities: Entity[], monster: AddMonsterPayload): Ent
   }
 
   return newMonsters;
-}
+};
 
 export interface Entity {
   id: number;
@@ -64,20 +64,20 @@ interface EncountersState {
 
 const fallbackInitialState: EncountersState = {
   selectedEncounter: null,
-  encounters: []
-}
+  encounters: [],
+};
 
 const getInitialState = (): EncountersState => {
   const localStorage = getItem<EncountersState>(ReducerNames.ENCOUNTERS);
   if (localStorage) {
     return {
       ...fallbackInitialState,
-      ...localStorage
+      ...localStorage,
     };
   }
 
   return fallbackInitialState;
-}
+};
 
 const encountersReducer = createSlice({
   name: ReducerNames.ENCOUNTERS,
@@ -87,7 +87,7 @@ const encountersReducer = createSlice({
       state.selectedEncounter = action.payload;
     },
     addEncounter(state, action: PayloadAction<string>) {
-      const maxId = Math.max(-1, ...state.encounters.map(encounter => encounter.id));
+      const maxId = Math.max(-1, ...state.encounters.map((encounter) => encounter.id));
       state.encounters.push({
         id: maxId + 1,
         name: action.payload,
@@ -97,49 +97,46 @@ const encountersReducer = createSlice({
       });
     },
     removeEncounter(state, action: PayloadAction<number>) {
-      state.encounters = state.encounters.filter(encounter => encounter.id !== action.payload);
+      state.encounters = state.encounters.filter((encounter) => encounter.id !== action.payload);
     },
     updateEncounterName(state, action: PayloadAction<string>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
 
         return {
           ...encounter,
-          name: action.payload
+          name: action.payload,
         };
-      })
+      });
     },
     removeEntity(state, action: PayloadAction<number>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
 
         return {
           ...encounter,
-          entities: encounter.entities.filter(entity => entity.id !== action.payload),
+          entities: encounter.entities.filter((entity) => entity.id !== action.payload),
         };
-      })
+      });
     },
     addPlayerCharacters(state, action: PayloadAction<string[]>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
 
         return {
           ...encounter,
-          entities: [
-            ...encounter.entities,
-            ...mapPlayersToEntities(encounter.entities, action.payload)
-          ]
-        }
-      })
+          entities: [...encounter.entities, ...mapPlayersToEntities(encounter.entities, action.payload)],
+        };
+      });
     },
     setFinishedValue(state, action: PayloadAction<boolean>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
@@ -149,36 +146,33 @@ const encountersReducer = createSlice({
           finished: action.payload,
           // Reset ready if encounter is finished
           ready: action.payload ? false : action.payload,
-        }
-      })
+        };
+      });
     },
     setReadyValue(state, action: PayloadAction<boolean>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
 
         return {
           ...encounter,
-          ready: action.payload
+          ready: action.payload,
         };
-      })
+      });
     },
     addMonster(state, action: PayloadAction<AddMonsterPayload>) {
-      state.encounters = state.encounters.map(encounter => {
+      state.encounters = state.encounters.map((encounter) => {
         if (state.selectedEncounter !== encounter.id) {
           return encounter;
         }
 
         return {
           ...encounter,
-          entities: [
-            ...encounter.entities,
-            ...mapMonsterToEntity(encounter.entities, action.payload)
-          ]
+          entities: [...encounter.entities, ...mapMonsterToEntity(encounter.entities, action.payload)],
         };
-      })
-    }
+      });
+    },
   },
 });
 
@@ -191,7 +185,7 @@ export const {
   addPlayerCharacters,
   setFinishedValue,
   setReadyValue,
-  addMonster
+  addMonster,
 } = encountersReducer.actions;
 
 export default encountersReducer.reducer;

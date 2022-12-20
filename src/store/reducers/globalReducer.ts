@@ -1,7 +1,7 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import {ReducerNames} from "./reducerNames";
-import {getItem} from "../../utilities/localStorage";
+import { ReducerNames } from './reducerNames';
+import { getItem } from '../../utilities/localStorage';
 
 export enum Page {
   ENCOUNTERS = 'encounters',
@@ -16,19 +16,19 @@ interface GlobalState {
 
 const fallbackInitialState: GlobalState = {
   page: Page.CHARACTERS,
-}
+};
 
 const getInitialState = (): GlobalState => {
   const localStorage = getItem<GlobalState>(ReducerNames.GLOBAL);
   if (localStorage) {
     return {
       ...fallbackInitialState,
-      ...localStorage
+      ...localStorage,
     };
   }
 
   return fallbackInitialState;
-}
+};
 
 const globalReducer = createSlice({
   name: ReducerNames.GLOBAL,
@@ -40,8 +40,6 @@ const globalReducer = createSlice({
   },
 });
 
-export const {
-  setPage,
-} = globalReducer.actions;
+export const { setPage } = globalReducer.actions;
 
 export default globalReducer.reducer;

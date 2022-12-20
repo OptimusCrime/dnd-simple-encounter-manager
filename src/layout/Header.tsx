@@ -10,17 +10,18 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-import {useAppDispatch} from "../store/hooks";
-import {Page, setPage} from "../store/reducers/globalReducer";
+import { useAppDispatch } from '../store/hooks';
+import { Page, setPage } from '../store/reducers/globalReducer';
 
-const pages: { text: string; identifier: Page}[] = [
+const pages: { text: string; identifier: Page }[] = [
   {
     text: 'Encounters',
     identifier: Page.ENCOUNTERS,
-  }, {
+  },
+  {
     text: 'Characters',
     identifier: Page.CHARACTERS,
-  }
+  },
 ];
 
 export const Header = () => {
@@ -68,10 +69,13 @@ export const Header = () => {
               }}
             >
               {pages.map(({ text, identifier }) => (
-                <MenuItem key={identifier} onClick={() => {
-                  dispatch(setPage(identifier));
-                  handleCloseNavMenu();
-                }}>
+                <MenuItem
+                  key={identifier}
+                  onClick={() => {
+                    dispatch(setPage(identifier));
+                    handleCloseNavMenu();
+                  }}
+                >
                   <Typography textAlign="center">{text}</Typography>
                 </MenuItem>
               ))}
@@ -96,7 +100,7 @@ export const Header = () => {
             DnD &ndash; Simple Combat
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map(({text, identifier}) => (
+            {pages.map(({ text, identifier }) => (
               <Button
                 key={identifier}
                 onClick={() => {
@@ -112,4 +116,5 @@ export const Header = () => {
         </Toolbar>
       </Container>
     </AppBar>
-  );}
+  );
+};
