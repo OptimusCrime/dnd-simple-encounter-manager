@@ -43,8 +43,8 @@ jobs:
           mv build/index.html docs/index.html
           sed -i 's/\/this-is-a-hack\/static\/css//g' docs/index.html
           sed -i 's/\/this-is-a-hack\/static\/js//g' docs/index.html
-          mv build/static/js/* docs/js
-          mv build/static/css/* docs/css
+          mv build/static/js/* docs/
+          mv build/static/css/* docs/
           mv .nojekyll ./docs
 
       - name: Deploy
