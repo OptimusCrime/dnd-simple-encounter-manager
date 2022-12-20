@@ -58,7 +58,7 @@ export const EncounterEdit = () => {
   const addMonsterCallback = () => {
     dispatch(addMonster({
       name: monsterNameInputFieldRef.current.value,
-      startHealth: parseInt(monsterStartHealthInputFieldRef.current.value) || 0,
+      startHealth: monsterStartHealthInputFieldRef.current.value,
       clones: parseInt(monsterCloneInputFieldRef.current.value)
     }));
 
@@ -124,7 +124,7 @@ export const EncounterEdit = () => {
                 <Switch
                   checked={finished}
                   onChange={(event) => {
-                    dispatch(setReadyValue(event.target.checked));
+                    dispatch(setFinishedValue(event.target.checked));
                   }}
                 />
               } label="Finished"/>
@@ -228,7 +228,6 @@ export const EncounterEdit = () => {
               <TextField
                 label="Monster start health"
                 variant="standard"
-                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
                 inputRef={monsterStartHealthInputFieldRef}
               />
               <Divider orientation="vertical" flexItem/>

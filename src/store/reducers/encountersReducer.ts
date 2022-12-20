@@ -2,10 +2,11 @@ import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 
 import {ReducerNames} from "./reducerNames";
 import {getItem} from "../../utilities/localStorage";
+import {calculateHealth} from "../../utilities/calculateHealth";
 
 interface AddMonsterPayload {
   name: string;
-  startHealth: number;
+  startHealth: string;
   clones: number;
 }
 
@@ -34,7 +35,7 @@ const mapMonsterToEntity = (entities: Entity[], monster: AddMonsterPayload): Ent
       id: maxId + 1 + i,
       name: name,
       isPlayerCharacter: false,
-      startHealth,
+      startHealth: calculateHealth(startHealth),
     });
   }
 
