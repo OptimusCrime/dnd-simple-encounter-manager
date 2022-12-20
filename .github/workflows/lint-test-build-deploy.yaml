@@ -41,9 +41,10 @@ jobs:
           npm run build
           mkdir docs
           mv build/index.html docs/index.html
-          sed -i 's/\/this-is-a-hack\/static//g' docs/index.html
-          mv build/static/js docs/js
-          mv build/static/css docs/css
+          sed -i 's/\/this-is-a-hack\/static\/css//g' docs/index.html
+          sed -i 's/\/this-is-a-hack\/static\/js//g' docs/index.html
+          mv build/static/js/* docs/js
+          mv build/static/css/* docs/css
           mv .nojekyll ./docs
 
       - name: Deploy
