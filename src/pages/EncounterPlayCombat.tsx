@@ -9,22 +9,24 @@ import {
   List,
   ListItem,
   Popover,
-  Stack, TextField,
+  Stack,
+  TextField,
 } from '@mui/material';
 import React from 'react';
 
-import {Content} from '../layout/Content';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
+import { Content } from '../layout/Content';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 import {
   Condition,
   nextRound,
-  PlayEntity, previousRound,
+  PlayEntity,
+  previousRound,
   updateCondition,
   updateHealth,
 } from '../store/reducers/encounterPlayReducer';
-import {Encounter} from '../store/reducers/encountersReducer';
-import {ReducerNames} from '../store/reducers/reducerNames';
-import {EffectsHelper} from './EncounterPlay/EffectsHelper';
+import { Page, setPage } from '../store/reducers/globalReducer';
+import { ReducerNames } from '../store/reducers/reducerNames';
+import { EncounterCombatEffectsPanel } from './EncounterPlay/EncounterCombatEffectsPanel';
 
 const isCurrentTurn = (entity: PlayEntity, currentInitiative: number): boolean => {
   return entity.initiative === currentInitiative;
@@ -42,15 +44,29 @@ const getBoxColor = (entity: PlayEntity, currentInitiative: number): string => {
   return '#eee';
 };
 
-export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) => {
+export const EncounterPlayCombat = () => {
   const dispatch = useAppDispatch();
 
-  const {entities, currentInitiative, round} = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
-
-  const {name} = encounter;
+  const { encounter, entities, currentInitiative, effects, round } = useAppSelector(
+    (state) => state[ReducerNames.ENCOUNTER_PLAY],
+  );
 
   const [conditionsAnchorEl, setConditionsAnchorEl] = React.useState<HTMLButtonElement | null>(null);
   const [conditionsPopoverContext, setConditionsPopoverContext] = React.useState<PlayEntity | null>(null);
+
+  const [changeHealthAnchorEl, setChangeHealthAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+  const changeHealthInputRef = React.useRef<null | HTMLInputElement>(null);
+  const [changeHealthPopoverContext, setChangeHealthPopoverContext] = React.useState<{
+    entity: PlayEntity;
+    mode: 'plus' | 'minus';
+  } | null>(null);
+
+  if (encounter === null) {
+    dispatch(setPage(Page.ENCOUNTERS));
+    return <div />;
+  }
+
+  const { name } = encounter;
 
   const handleConditionsPopoverOpen = (event: React.MouseEvent<HTMLButtonElement>, entity: PlayEntity) => {
     setConditionsAnchorEl(event.currentTarget);
@@ -62,15 +78,15 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
     setConditionsPopoverContext(null);
   };
 
-  const [changeHealthAnchorEl, setChangeHealthAnchorEl] = React.useState<HTMLButtonElement | null>(null);
-  const changeHealthInputRef = React.useRef<null | HTMLInputElement>(null);
-  const [changeHealthPopoverContext, setChangeHealthPopoverContext] = React.useState<{ entity: PlayEntity, mode: 'plus' | 'minus' } | null>(null);
-
-  const handleChangeHealthPopoverOpen = (event: React.MouseEvent<HTMLButtonElement>, entity: PlayEntity, mode: 'plus' | 'minus') => {
+  const handleChangeHealthPopoverOpen = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    entity: PlayEntity,
+    mode: 'plus' | 'minus',
+  ) => {
     setChangeHealthAnchorEl(event.currentTarget);
     setChangeHealthPopoverContext({
       entity,
-      mode
+      mode,
     });
 
     setTimeout(() => {
@@ -96,9 +112,9 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
         }}
       >
         <Content
-          title={`Playing encounter: ${name} -- Round #${round + 1}`}
+          title={`${name} [round: ${round + 1}]`}
           sx={{
-            width: '100%'
+            width: '100%',
           }}
         />
       </Container>
@@ -107,7 +123,7 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
           pl: 10,
           pr: 10,
           display: 'flex',
-          margin: 'auto'
+          margin: 'auto',
         }}
       >
         <Stack
@@ -123,11 +139,11 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
               p: 1,
               pb: 0,
               pt: 0,
-              width: '65%'
+              width: '65%',
             }}
           >
             <Box>
-              <List sx={{pb: 1}}>
+              <List sx={{ pb: 1 }}>
                 {entities.map((entity, idx) => (
                   <ListItem
                     key={entity.initiative}
@@ -136,7 +152,7 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                       mb: idx + 1 === numberOfEntities ? 0 : 1,
                       width: '100%',
                       borderRadius: '4px 4px',
-                      p: 1
+                      p: 1,
                     }}
                   >
                     <Stack
@@ -154,18 +170,42 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                           alignItems: 'center',
                         }}
                       >
-                        <Box sx={{minWidth: '15rem'}}>
+                        <Box sx={{ minWidth: '15rem' }}>
                           <strong>{entity.initiative + 1}.</strong> {entity.name}
                         </Box>
                         {entity.isSurprised && (
                           <>
-                            <Divider orientation="vertical" flexItem/>
+                            <Divider orientation="vertical" flexItem />
                             <strong>SURPRISED!</strong>
                           </>
                         )}
-                        <Divider orientation="vertical" flexItem/>
-                        <strong>Conditions:</strong>{' '}
-                        {entity.conditions.length === 0 ? 'None' : entity.conditions.join(', ')}
+                        <Divider orientation="vertical" flexItem sx={{ mr: 1 }} />
+                        {entity.conditions.length === 0 &&
+                        !effects.find(
+                          (effect) => effect.active && effect.affected.some((affected) => affected.id === entity.id),
+                        ) ? (
+                          <em>No effects or conditions</em>
+                        ) : (
+                          <>
+                            <>
+                              <strong>Effects:</strong>&nbsp;
+                              {effects
+                                .filter(
+                                  (effect) =>
+                                    effect.active && effect.affected.some((affected) => affected.id === entity.id),
+                                )
+                                .map((effect) => effect.name)
+                                .join(', ')}
+                              &nbsp;
+                            </>
+                            {entity.conditions.length > 0 && (
+                              <>
+                                <strong>Conditions:</strong>&nbsp;
+                                {entity.conditions.join(', ')}
+                              </>
+                            )}
+                          </>
+                        )}
                         <Box
                           sx={{
                             // Bah, come on
@@ -173,12 +213,10 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                             justifyContent: 'center',
                           }}
                         >
-                          <Button variant="contained"
-                                  onClick={(element) => handleConditionsPopoverOpen(element, entity)}>
-                            Actions
-                          </Button>
-                          <Button variant="contained"
-                                  onClick={(element) => handleConditionsPopoverOpen(element, entity)}>
+                          <Button
+                            variant="contained"
+                            onClick={(element) => handleConditionsPopoverOpen(element, entity)}
+                          >
                             Conditions
                           </Button>
                           <Popover
@@ -191,11 +229,11 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                               horizontal: 'right',
                             }}
                           >
-                            <Box sx={{m: 1}}>
+                            <Box sx={{ m: 1 }}>
                               <FormGroup>
                                 {Object.keys(Condition).map((key) => {
                                   if (conditionsPopoverContext === null) {
-                                    return <div/>;
+                                    return <div />;
                                   }
 
                                   // Stupid
@@ -232,25 +270,30 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                       </Stack>
                       <Stack direction="row">
                         {!entity.isPlayerCharacter && (
-                          <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{mt: 1, mb: 1}}>
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ mt: 1, mb: 1 }}
+                          >
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: -10}))}
+                              sx={{ mr: 1 }}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: -10 }))}
                             >
                               -10HP
                             </Button>
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: -5}))}
+                              sx={{ mr: 1 }}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: -5 }))}
                             >
                               -5HP
                             </Button>
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: -1}))}
+                              sx={{ mr: 1 }}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: -1 }))}
                             >
                               -1HP
                             </Button>
@@ -265,8 +308,8 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                                 margin: '0 1rem',
                               }}
                             >
-                            {entity.currentHealth}HP / {entity.startHealth}HP
-                          </span>
+                              {entity.currentHealth}HP / {entity.startHealth}HP
+                            </span>
 
                             <Popover
                               id={`popover_health_${entity.id}`}
@@ -278,23 +321,32 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                                 horizontal: 'right',
                               }}
                             >
-                              <Box sx={{m: 1}}>
+                              <Box sx={{ m: 1 }}>
                                 <TextField
-                                  label={changeHealthPopoverContext?.mode === "plus" ? "Increase health" : "Decrease health"}
+                                  label={
+                                    changeHealthPopoverContext?.mode === 'plus' ? 'Increase health' : 'Decrease health'
+                                  }
                                   defaultValue=""
                                   inputRef={changeHealthInputRef}
-                                  InputLabelProps={{shrink: true}}
+                                  InputLabelProps={{ shrink: true }}
                                   size="small"
-                                  sx={{mr: 1, ml: 1}}
+                                  sx={{ mr: 1, ml: 1 }}
                                   onKeyUp={(event) => {
-                                    if (event.key.toLowerCase() === 'enter' && changeHealthInputRef?.current?.value && changeHealthPopoverContext?.entity) {
+                                    if (
+                                      event.key.toLowerCase() === 'enter' &&
+                                      changeHealthInputRef?.current?.value &&
+                                      changeHealthPopoverContext?.entity
+                                    ) {
                                       const value = changeHealthInputRef.current?.value;
 
                                       if (/^[0-9]+$/.test(value)) {
-                                        dispatch(updateHealth({
-                                          id: changeHealthPopoverContext.entity.id,
-                                          change: parseInt(value) * (changeHealthPopoverContext?.mode === 'plus' ? 1 : -1)
-                                        }));
+                                        dispatch(
+                                          updateHealth({
+                                            id: changeHealthPopoverContext.entity.id,
+                                            change:
+                                              parseInt(value) * (changeHealthPopoverContext?.mode === 'plus' ? 1 : -1),
+                                          }),
+                                        );
                                       }
 
                                       handleChangeHealthPopoverClose();
@@ -305,28 +357,28 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                             </Popover>
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
+                              sx={{ mr: 1 }}
                               onClick={(element) => handleChangeHealthPopoverOpen(element, entity, 'plus')}
                             >
                               +
                             </Button>
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: 1}))}
+                              sx={{ mr: 1 }}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: 1 }))}
                             >
                               +1HP
                             </Button>
                             <Button
                               variant="contained"
-                              sx={{mr: 1}}
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: 5}))}
+                              sx={{ mr: 1 }}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: 5 }))}
                             >
                               +5HP
                             </Button>
                             <Button
                               variant="contained"
-                              onClick={() => dispatch(updateHealth({id: entity.id, change: 10}))}
+                              onClick={() => dispatch(updateHealth({ id: entity.id, change: 10 }))}
                             >
                               +10HP
                             </Button>
@@ -335,17 +387,10 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
                       </Stack>
                       {isCurrentTurn(entity, currentInitiative) && (
                         <Stack direction="row" justifyContent="end">
-                          <Button
-                            variant="contained"
-                            onClick={() => dispatch(previousRound())}
-                            sx={{mr: 1}}
-                          >
+                          <Button variant="contained" onClick={() => dispatch(previousRound())} sx={{ mr: 1 }}>
                             Previous
                           </Button>
-                          <Button
-                            variant="contained"
-                            onClick={() => dispatch(nextRound({id: entity.id}))}
-                          >
+                          <Button variant="contained" onClick={() => dispatch(nextRound({ id: entity.id }))}>
                             Next
                           </Button>
                         </Stack>
@@ -356,7 +401,7 @@ export const EncounterPlayPhasePlay = ({encounter}: { encounter: Encounter }) =>
               </List>
             </Box>
           </Box>
-          <EffectsHelper/>
+          <EncounterCombatEffectsPanel />
         </Stack>
       </Box>
     </>

@@ -1,4 +1,4 @@
-import {ArrowDownward, ArrowUpward} from '@mui/icons-material';
+import { ArrowDownward, ArrowUpward } from '@mui/icons-material';
 import {
   Box,
   Button,
@@ -12,15 +12,15 @@ import {
   Switch,
   TextField,
 } from '@mui/material';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
-import {Content} from '../layout/Content';
-import {useAppDispatch, useAppSelector} from '../store/hooks';
-import {beginEncounter} from '../store/reducers/encounterPlayReducer';
-import {Encounter, Entity} from '../store/reducers/encountersReducer';
-import {InitiativeEntityState} from './EncounterPlay.types';
-import {ReducerNames} from "../store/reducers/reducerNames";
-import {Page, setPage} from "../store/reducers/globalReducer";
+import { Content } from '../layout/Content';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { beginEncounter } from '../store/reducers/encounterPlayReducer';
+import { Encounter, Entity } from '../store/reducers/encountersReducer';
+import { Page, setPage } from '../store/reducers/globalReducer';
+import { ReducerNames } from '../store/reducers/reducerNames';
+import { InitiativeEntityState } from './EncounterPlay.types';
 
 enum MoveDirection {
   UP,
@@ -28,7 +28,7 @@ enum MoveDirection {
 }
 
 const mapEntityToInitiativeState = (entity: Entity, index: number): InitiativeEntityState => {
-  const {id, name, startHealth, isPlayerCharacter} = entity;
+  const { id, name, startHealth, isPlayerCharacter } = entity;
 
   return {
     id,
@@ -43,9 +43,13 @@ const mapEntityToInitiativeState = (entity: Entity, index: number): InitiativeEn
   };
 };
 
-const mapEncounterToInitiativeState = (encounter: Encounter): InitiativeEntityState[] => {
+const mapEncounterToInitiativeState = (encounter: Encounter | null): InitiativeEntityState[] => {
+  if (!encounter) {
+    return [];
+  }
+
   // Let's always put the players on top
-  const {entities} = encounter;
+  const { entities } = encounter;
 
   const entitiesWithPlayersFirst = [
     ...entities.filter((entity) => entity.isPlayerCharacter),
@@ -55,18 +59,19 @@ const mapEncounterToInitiativeState = (encounter: Encounter): InitiativeEntitySt
   return [...entitiesWithPlayersFirst.map((entity, index) => mapEntityToInitiativeState(entity, index))];
 };
 
-export const EncounterPlayPhaseInitiative = () => {
+export const EncounterPlayInitiative = () => {
   const dispatch = useAppDispatch();
 
-  const {phase, encounter} = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
-
-  if (encounter === null) {
-    return dispatch(setPage(Page.ENCOUNTERS))
-  }
+  const { encounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
 
   const [state, setState] = useState<InitiativeEntityState[]>(mapEncounterToInitiativeState(encounter));
 
-  const {name} = encounter;
+  if (encounter === null) {
+    dispatch(setPage(Page.ENCOUNTERS));
+    return <div />;
+  }
+
+  const { name } = encounter;
 
   const updateState = (id: number, data: Partial<InitiativeEntityState>) => {
     setState((prevState) => {
@@ -144,13 +149,14 @@ export const EncounterPlayPhaseInitiative = () => {
 
   const startEncounterCallback = () => {
     dispatch(beginEncounter(state));
+    dispatch(setPage(Page.ENCOUNTER_PLAY_COMBAT));
   };
 
   const entitiesNum = sortedState.length;
 
   return (
     <>
-      <Content title={`Decide initiative: ${name}`}>
+      <Content title={name}>
         <Box
           sx={{
             backgroundColor: '#fff',
@@ -160,7 +166,7 @@ export const EncounterPlayPhaseInitiative = () => {
           }}
         >
           <Box>
-            <List sx={{pb: 1}}>
+            <List sx={{ pb: 1 }}>
               {sortedState.map((entity, idx) => (
                 <ListItem
                   key={entity.id}
@@ -179,7 +185,7 @@ export const EncounterPlayPhaseInitiative = () => {
                           tabIndex={-1}
                           onClick={() => moveEntityUpOrDown(entity.id, MoveDirection.DOWN)}
                         >
-                          <ArrowDownward/>
+                          <ArrowDownward />
                         </IconButton>
                       )}
                       {entity.order > 0 && (
@@ -188,7 +194,7 @@ export const EncounterPlayPhaseInitiative = () => {
                           tabIndex={-1}
                           onClick={() => moveEntityUpOrDown(entity.id, MoveDirection.UP)}
                         >
-                          <ArrowUpward/>
+                          <ArrowUpward />
                         </IconButton>
                       )}
                     </>
@@ -209,15 +215,15 @@ export const EncounterPlayPhaseInitiative = () => {
                         {`${entity.name} ${entity.isPlayerCharacter ? '' : `(${entity.startHealth} HP)`}`}
                       </Stack>
 
-                      <Divider orientation="vertical" flexItem/>
+                      <Divider orientation="vertical" flexItem />
 
                       <TextField
                         label="Initiative"
                         defaultValue=""
-                        inputProps={{tabIndex: entity.order + 100}}
-                        InputLabelProps={{shrink: true}}
+                        inputProps={{ tabIndex: entity.order + 100 }}
+                        InputLabelProps={{ shrink: true }}
                         size="small"
-                        sx={{ mr: 1, ml: 1}}
+                        sx={{ mr: 1, ml: 1 }}
                         onChange={(event) => {
                           const value = event.target.value;
                           if (/^[0-9]+$/.test(value)) {
@@ -234,14 +240,14 @@ export const EncounterPlayPhaseInitiative = () => {
 
                       {!entity.isPlayerCharacter && (
                         <>
-                          <Divider orientation="vertical" flexItem/>
+                          <Divider orientation="vertical" flexItem />
                           <TextField
                             label="Initial damage"
                             defaultValue=""
-                            inputProps={{tabIndex: -1}}
-                            InputLabelProps={{shrink: true}}
+                            inputProps={{ tabIndex: -1 }}
+                            InputLabelProps={{ shrink: true }}
                             size="small"
-                            sx={{ mr: 1, ml: 1}}
+                            sx={{ mr: 1, ml: 1 }}
                             onChange={(event) => {
                               const value = event.target.value;
                               if (/^[0-9]+$/.test(value)) {
@@ -254,20 +260,20 @@ export const EncounterPlayPhaseInitiative = () => {
                         </>
                       )}
 
-                      <Divider orientation="vertical" flexItem/>
+                      <Divider orientation="vertical" flexItem />
 
                       <Stack
                         direction="column"
                         alignItems="flex-start"
                         justifyContent="space-between"
-                        sx={{alignSelf: 'center'}}
+                        sx={{ alignSelf: 'center' }}
                       >
                         <FormGroup>
                           <FormControlLabel
                             control={
                               <Switch
                                 tabIndex={-1}
-                                sx={{ mr: 1, ml: 1}}
+                                sx={{ mr: 1, ml: 1 }}
                                 checked={entity.isSurprised}
                                 onChange={(event) => {
                                   updateState(entity.id, {
@@ -281,20 +287,20 @@ export const EncounterPlayPhaseInitiative = () => {
                         </FormGroup>
                       </Stack>
 
-                      <Divider orientation="vertical" flexItem/>
+                      <Divider orientation="vertical" flexItem />
 
                       <Stack
                         direction="column"
                         alignItems="flex-start"
                         justifyContent="space-between"
-                        sx={{alignSelf: 'center'}}
+                        sx={{ alignSelf: 'center' }}
                       >
                         <FormGroup>
                           <FormControlLabel
                             control={
                               <Switch
                                 tabIndex={-1}
-                                sx={{ mr: 1, ml: 1}}
+                                sx={{ mr: 1, ml: 1 }}
                                 checked={entity.inPlay}
                                 onChange={(event) => {
                                   updateState(entity.id, {

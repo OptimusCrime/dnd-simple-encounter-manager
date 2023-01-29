@@ -1,46 +1,56 @@
-import { Container } from '@mui/material';
 import React from 'react';
 
-import { Header } from './layout/Header';
+import { MultiColumnWrapper, OneColumnWrapper } from './layout/Wrappers';
 import { Characters } from './pages/Characters';
 import { EncounterEdit } from './pages/EncounterEdit';
-import { EncounterPlay } from './pages/EncounterPlay';
+import { EncounterPlayCombat } from './pages/EncounterPlayCombat';
+import { EncounterPlayInitiative } from './pages/EncounterPlayInitiative';
 import { Encounters } from './pages/Encounters';
 import { Settings } from './pages/Settings';
 import { useAppSelector } from './store/hooks';
 import { Page } from './store/reducers/globalReducer';
 import { ReducerNames } from './store/reducers/reducerNames';
 
-const Content = () => {
+export const App = () => {
   const { page } = useAppSelector((state) => state[ReducerNames.GLOBAL]);
 
   switch (page) {
     case Page.ENCOUNTERS:
-      return <Encounters />;
+      return (
+        <OneColumnWrapper>
+          <Encounters />
+        </OneColumnWrapper>
+      );
     case Page.ENCOUNTER_EDIT:
-      return <EncounterEdit />;
-    case Page.ENCOUNTER_PLAY:
-      return <EncounterPlay />;
+      return (
+        <OneColumnWrapper>
+          <EncounterEdit />
+        </OneColumnWrapper>
+      );
+    case Page.ENCOUNTER_PLAY_INITIATIVE:
+      return (
+        <OneColumnWrapper>
+          <EncounterPlayInitiative />
+        </OneColumnWrapper>
+      );
+    case Page.ENCOUNTER_PLAY_COMBAT:
+      return (
+        <MultiColumnWrapper>
+          <EncounterPlayCombat />
+        </MultiColumnWrapper>
+      );
     case Page.SETTINGS:
-      return <Settings />;
+      return (
+        <OneColumnWrapper>
+          <Settings />
+        </OneColumnWrapper>
+      );
     case Page.CHARACTERS:
     default:
-      return <Characters />;
+      return (
+        <OneColumnWrapper>
+          <Characters />
+        </OneColumnWrapper>
+      );
   }
-};
-
-export const App = () => {
-  return (
-    <div className="App">
-      <Header />
-      <Container
-        sx={{
-          mt: 2,
-          pb: 5,
-        }}
-      >
-        <Content />
-      </Container>
-    </div>
-  );
 };

@@ -6,7 +6,8 @@ import { ReducerNames } from './reducerNames';
 export enum Page {
   ENCOUNTERS = 'encounters',
   ENCOUNTER_EDIT = 'encounter_edit',
-  ENCOUNTER_PLAY = 'encounter_play',
+  ENCOUNTER_PLAY_INITIATIVE = 'encounter_play_initiative',
+  ENCOUNTER_PLAY_COMBAT = 'encounter_play_combat',
   CHARACTERS = 'characters',
   SETTINGS = 'settings',
 }

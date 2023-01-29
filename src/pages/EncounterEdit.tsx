@@ -65,7 +65,7 @@ export const EncounterEdit = () => {
     if (currentEncounter) {
       dispatch(setReadyValue(true));
       dispatch(setPlayEncounter(currentEncounter));
-      dispatch(setPage(Page.ENCOUNTER_PLAY));
+      dispatch(setPage(Page.ENCOUNTER_PLAY_INITIATIVE));
     }
   };
 

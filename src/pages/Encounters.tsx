@@ -89,7 +89,7 @@ export const Encounters = () => {
                       onClick={() => {
                         if (encounter.ready) {
                           dispatch(setPlayEncounter(encounter));
-                          dispatch(setPage(Page.ENCOUNTER_PLAY));
+                          dispatch(setPage(Page.ENCOUNTER_PLAY_INITIATIVE));
                         }
                       }}
                     >

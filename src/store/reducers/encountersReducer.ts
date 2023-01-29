@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { calculateHealth } from '../../utilities/calculateHealth';
+import { findMaxId } from '../../utilities/findMaxId';
 import { getItem } from '../../utilities/localStorage';
 import { ReducerNames } from './reducerNames';
 
@@ -9,8 +10,6 @@ interface AddMonsterPayload {
   startHealth: string;
   clones: number;
 }
-
-const findMaxId = (entities: Entity[]): number => Math.max(-1, ...entities.map((entity) => entity.id));
 
 const mapPlayersToEntities = (entities: Entity[], players: string[]): Entity[] => {
   let maxId = findMaxId(entities);
