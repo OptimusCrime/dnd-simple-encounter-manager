@@ -1,12 +1,9 @@
 import React from 'react';
 
 import { MultiColumnWrapper, OneColumnWrapper } from './layout/Wrappers';
-import { Characters } from './pages/Characters';
-import { EncounterEdit } from './pages/EncounterEdit';
 import { EncounterPlayCombat } from './pages/EncounterPlayCombat';
 import { EncounterPlayInitiative } from './pages/EncounterPlayInitiative';
-import { Encounters } from './pages/Encounters';
-import { Settings } from './pages/Settings';
+import { Characters, EncounterEdit, EncountersList, Settings } from './pages';
 import { useAppSelector } from './store/hooks';
 import { Page } from './store/reducers/globalReducer';
 import { ReducerNames } from './store/reducers/reducerNames';
@@ -18,7 +15,7 @@ export const App = () => {
     case Page.ENCOUNTERS:
       return (
         <OneColumnWrapper>
-          <Encounters />
+          <EncountersList />
         </OneColumnWrapper>
       );
     case Page.ENCOUNTER_EDIT:

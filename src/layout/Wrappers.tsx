@@ -8,22 +8,21 @@ interface WrapperProps {
 }
 
 const Wrapper = ({ children }: WrapperProps) => (
-  <div className="App">
-    <Header />
-    {children}
-  </div>
+  <>
+    <div className="container max-w-none mb-16">
+      <div className="container max-w-none bg-neutral">
+        <div className="container">
+          <Header />
+        </div>
+      </div>
+      {children}
+    </div>
+  </>
 );
 
 export const OneColumnWrapper = ({ children }: WrapperProps) => (
   <Wrapper>
-    <Container
-      sx={{
-        mt: 2,
-        pb: 25,
-      }}
-    >
-      {children}
-    </Container>
+    <div className="container mx-auto">{children}</div>
   </Wrapper>
 );
 

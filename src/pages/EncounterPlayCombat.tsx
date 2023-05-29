@@ -111,12 +111,7 @@ export const EncounterPlayCombat = () => {
           mt: 2,
         }}
       >
-        <Content
-          title={`${name} [round: ${round + 1}]`}
-          sx={{
-            width: '100%',
-          }}
-        />
+        <Content title={`${name} [round: ${round + 1}]`} />
       </Container>
       <Box
         sx={{
