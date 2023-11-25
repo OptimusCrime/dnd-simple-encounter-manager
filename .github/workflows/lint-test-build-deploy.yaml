@@ -1,4 +1,4 @@
-name: dnd-simple-combat-management
+name: dnd-simple-encounter-manager
 on:
   push:
     branches:
