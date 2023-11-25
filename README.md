@@ -1,3 +1,3 @@
-# DnD &ndash; Simple Combat Management
+# Dungeons and Dragons &ndash; Simple Encounter Manager
 
-Simple tool used to keep track of DnD combat scenarios. Data is stored in LocalStorage.
+Simple tool to run Dungeons and Dragons encounters. Kept purposefully simple.
