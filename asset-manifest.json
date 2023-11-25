@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/dnd-simple-combat-management/static/css/main.ab925dff.css",
-    "main.js": "/dnd-simple-combat-management/static/js/main.99b38f13.js",
-    "index.html": "/dnd-simple-combat-management/index.html",
-    "main.ab925dff.css.map": "/dnd-simple-combat-management/static/css/main.ab925dff.css.map",
-    "main.99b38f13.js.map": "/dnd-simple-combat-management/static/js/main.99b38f13.js.map"
+    "main.css": "/dnd-simple-encounter-manager/static/css/main.3d8ea8b1.css",
+    "main.js": "/dnd-simple-encounter-manager/static/js/main.d22ea258.js",
+    "index.html": "/dnd-simple-encounter-manager/index.html",
+    "main.3d8ea8b1.css.map": "/dnd-simple-encounter-manager/static/css/main.3d8ea8b1.css.map",
+    "main.d22ea258.js.map": "/dnd-simple-encounter-manager/static/js/main.d22ea258.js.map"
   },
   "entrypoints": [
-    "static/css/main.ab925dff.css",
-    "static/js/main.99b38f13.js"
+    "static/css/main.3d8ea8b1.css",
+    "static/js/main.d22ea258.js"
   ]
 }
