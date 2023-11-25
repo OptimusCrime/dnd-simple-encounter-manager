@@ -2,6 +2,7 @@
   "name": "dnd-simple-encounter-manager",
   "version": "1.0.0",
   "homepage": "/dnd-simple-encounter-manager",
+  "description": "Tool to help you play DnD encounters",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.0",
     "@testing-library/jest-dom": "^5.16.5",
