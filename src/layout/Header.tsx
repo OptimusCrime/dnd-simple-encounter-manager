@@ -53,7 +53,7 @@ export const Header = () => {
             dispatch(setPage(Page.ENCOUNTERS_LIST));
           }}
         >
-          DnD Simple Combat Management
+          DnD &mdash; Simple Encounter Manager
         </a>
       </div>
       <div className="navbar-end hidden lg:flex">
