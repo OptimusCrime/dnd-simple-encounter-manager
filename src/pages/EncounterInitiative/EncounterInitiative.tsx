@@ -71,18 +71,18 @@ export const EncounterInitiative = () => {
     setState(sortEntitiesByInitiative(state));
   };
 
+  const numberOfEntities = state.length;
+  const sortedState = state.slice().sort((a, b) => a.order - b.order);
+
   const startEncounterCallback = () => {
     dispatch(
       beginEncounter({
         name: name,
-        entities: state,
+        entities: sortedState,
       }),
     );
     dispatch(setPage(Page.ENCOUNTER_COMBAT));
   };
-
-  const numberOfEntities = state.length;
-  const sortedState = state.slice().sort((a, b) => a.order - b.order);
 
   // TODO: Create component for each entity too?
   return (
