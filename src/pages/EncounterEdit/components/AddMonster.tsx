@@ -1,6 +1,7 @@
 import React from 'react';
-import { addMonster } from '../../../store/reducers/encountersReducer';
+
 import { useAppDispatch } from '../../../store/hooks';
+import { addMonster } from '../../../store/reducers/encountersReducer';
 
 export const AddMonster = () => {
   const dispatch = useAppDispatch();

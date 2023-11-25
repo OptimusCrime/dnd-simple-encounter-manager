@@ -1,23 +1,25 @@
 import React from 'react';
 
-import { Content } from '../../layout/Content';
+import { Heading } from '../../components';
 import { ListCharacters, NewCharacter } from './components';
 
 export const Characters = () => (
   <>
-    <Content title="Characters">
+    <div>
+      <Heading text="Characters" />
       <div className="card bg-neutral text-neutral-content card-compact">
         <div className="card-body prose">
           <ListCharacters />
         </div>
       </div>
-    </Content>
-    <Content title="Add character" className="mt-8">
+    </div>
+    <div className="mt-8">
+      <Heading text="Add character" />
       <div className="card bg-neutral text-neutral-content card-compact">
         <div className="card-body">
           <NewCharacter />
         </div>
       </div>
-    </Content>
+    </div>
   </>
 );

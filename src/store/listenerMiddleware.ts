@@ -10,7 +10,7 @@ listenerMiddleware.startListening({
     // Lol
     return true;
   },
-  effect: (action, listenerApi) => {
+  effect: (_action, listenerApi) => {
     const state = listenerApi.getState();
 
     // The key in the global state is the name of the reducer

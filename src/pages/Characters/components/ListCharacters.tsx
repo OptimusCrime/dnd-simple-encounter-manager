@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { removeCharacter } from '../../../store/reducers/characterReducer';
 import { ReducerNames } from '../../../store/reducers/reducerNames';
-import { removeCharacter } from '../../../store/reducers/charactersReducer';
 
 export const ListCharacters = () => {
   const { characters } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);

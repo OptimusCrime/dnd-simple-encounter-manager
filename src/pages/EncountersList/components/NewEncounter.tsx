@@ -1,7 +1,8 @@
 import React from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { ReducerNames } from '../../../store/reducers/reducerNames';
 import { addEncounter } from '../../../store/reducers/encountersReducer';
+import { ReducerNames } from '../../../store/reducers/reducerNames';
 
 export const NewEncounter = () => {
   const { characters } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);

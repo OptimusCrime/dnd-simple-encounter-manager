@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 
 import { listenerMiddleware } from './listenerMiddleware';
-import charactersReducer from './reducers/charactersReducer';
-import encounterPlayReducer from './reducers/encounterPlayReducer';
-import encountersReducer from './reducers/encountersReducer';
-import globalReducer from './reducers/globalReducer';
+import charactersReducer from './reducers/characterReducer/charactersReducer';
+import encounterPlayReducer from './reducers/encounterPlayReducer/encounterPlayReducer';
+import encountersReducer from './reducers/encountersReducer/encountersReducer';
+import globalReducer from './reducers/globalReducer/globalReducer';
 import { ReducerNames } from './reducers/reducerNames';
 
 export const store = configureStore({

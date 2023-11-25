@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Content } from '../../layout/Content';
+import { Heading } from '../../components';
 import { ReducerNames } from '../../store/reducers/reducerNames';
 import { deleteKey } from '../../utilities/localStorage';
 import { unreachableCode } from '../../utilities/unreachableCode';
@@ -35,7 +35,8 @@ export const Settings = () => {
   };
 
   return (
-    <Content title="Clear local cache">
+    <div>
+      <Heading text="Clear local cache" />
       <div className="card bg-neutral text-neutral-content card-compact">
         <div className="card-body">
           <div className="card-actions flex justify-between">
@@ -51,6 +52,6 @@ export const Settings = () => {
           </div>
         </div>
       </div>
-    </Content>
+    </div>
   );
 };

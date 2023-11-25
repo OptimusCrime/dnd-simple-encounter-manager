@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Content } from '../../layout/Content';
+import { Heading } from '../../components';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectEncounter } from '../../store/reducers/encountersReducer';
 import { Page, setPage } from '../../store/reducers/globalReducer';
@@ -14,26 +14,26 @@ export const EncounterEdit = () => {
   const currentEncounter = encounters.find((encounter) => encounter.id === selectedEncounter);
   if (!currentEncounter) {
     dispatch(selectEncounter(null));
-    dispatch(setPage(Page.ENCOUNTERS));
+    dispatch(setPage(Page.ENCOUNTERS_LIST));
 
     // The fuck
     return <div></div>;
   }
 
-  const { name, entities } = currentEncounter;
-
-  const monsters = entities.filter((entity) => !entity.isPlayerCharacter);
+  const { name, monsters } = currentEncounter;
 
   return (
-    <>
-      <Content title={`Encounter: ${name}`}>
+    <div>
+      <div>
+        <Heading text={`Encounter: ${name}`} />
         <div className="card bg-neutral text-neutral-content card-compact">
           <div className="card-body">
             <EncounterInformation />
           </div>
         </div>
-      </Content>
-      <Content title={`Monsters (${monsters.length})`} className="mt-8">
+      </div>
+      <div className="mt-8">
+        <Heading text={`Monsters (${monsters.length})`} />
         <div className="card bg-neutral text-neutral-content card-compact">
           <div className="card-body prose">
             <ListMonsters />
@@ -42,7 +42,7 @@ export const EncounterEdit = () => {
             <AddMonster />
           </div>
         </div>
-      </Content>
-    </>
+      </div>
+    </div>
   );
 };

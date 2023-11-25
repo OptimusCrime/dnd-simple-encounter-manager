@@ -6,7 +6,7 @@ import { Page, setPage } from '../store/reducers/globalReducer';
 const pages: { text: string; identifier: Page }[] = [
   {
     text: 'Encounters',
-    identifier: Page.ENCOUNTERS,
+    identifier: Page.ENCOUNTERS_LIST,
   },
   {
     text: 'Characters',
@@ -50,7 +50,7 @@ export const Header = () => {
           onClick={(e) => {
             e.preventDefault();
 
-            dispatch(setPage(Page.ENCOUNTERS));
+            dispatch(setPage(Page.ENCOUNTERS_LIST));
           }}
         >
           DnD Simple Combat Management

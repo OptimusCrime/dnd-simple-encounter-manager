@@ -1,6 +1,7 @@
 import React from 'react';
+
 import { useAppDispatch } from '../../../store/hooks';
-import { addCharacter } from '../../../store/reducers/charactersReducer';
+import { addCharacter } from '../../../store/reducers/characterReducer';
 
 export const NewCharacter = () => {
   const dispatch = useAppDispatch();

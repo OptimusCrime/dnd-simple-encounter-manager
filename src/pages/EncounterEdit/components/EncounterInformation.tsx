@@ -1,14 +1,16 @@
+import cx from 'classnames';
 import React from 'react';
-import {
-  selectEncounter,
-  setFinishedValue,
-  setReadyValue,
-  updateEncounterName,
-} from '../../../store/reducers/encountersReducer';
+
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { ReducerNames } from '../../../store/reducers/reducerNames';
+import {
+  removeEncounter,
+  selectEncounter,
+  updateEncounterFinished,
+  updateEncounterName,
+  updateEncounterReady,
+} from '../../../store/reducers/encountersReducer';
 import { Page, setPage } from '../../../store/reducers/globalReducer';
-import { setPlayEncounter } from '../../../store/reducers/encounterPlayReducer';
+import { ReducerNames } from '../../../store/reducers/reducerNames';
 
 export const EncounterInformation = () => {
   const { encounters, selectedEncounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
@@ -19,7 +21,7 @@ export const EncounterInformation = () => {
   const currentEncounter = encounters.find((encounter) => encounter.id === selectedEncounter);
   if (!currentEncounter) {
     dispatch(selectEncounter(null));
-    dispatch(setPage(Page.ENCOUNTERS));
+    dispatch(setPage(Page.ENCOUNTERS_LIST));
 
     // The fuck
     return <div></div>;
@@ -35,9 +37,16 @@ export const EncounterInformation = () => {
 
   const startEncounterCallback = () => {
     if (currentEncounter) {
-      dispatch(setReadyValue(true));
-      dispatch(setPlayEncounter(currentEncounter));
-      dispatch(setPage(Page.ENCOUNTER_PLAY_INITIATIVE));
+      dispatch(updateEncounterReady(true));
+      dispatch(selectEncounter(currentEncounter.id));
+      dispatch(setPage(Page.ENCOUNTER_INITIATIVE));
+    }
+  };
+
+  const deleteEncounterCallback = () => {
+    if (currentEncounter) {
+      dispatch(removeEncounter(currentEncounter.id));
+      dispatch(setPage(Page.ENCOUNTERS_LIST));
     }
   };
 
@@ -73,10 +82,10 @@ export const EncounterInformation = () => {
               <span className="label-text text-lg mr-4">Ready</span>
               <input
                 type="checkbox"
-                className={`toggle ${ready ? 'toggle-success' : ''}`}
+                className={cx('toggle', ready ? 'toggle-success' : '')}
                 defaultChecked={ready}
                 onChange={(event) => {
-                  dispatch(setReadyValue(event.target.checked));
+                  dispatch(updateEncounterReady(event.target.checked));
                 }}
               />
             </label>
@@ -88,18 +97,18 @@ export const EncounterInformation = () => {
               <span className="label-text text-lg mr-4">Finished</span>
               <input
                 type="checkbox"
-                className={`toggle ${finished ? 'toggle-success' : ''}`}
+                className={cx('toggle', finished ? 'toggle-success' : '')}
                 defaultChecked={finished}
                 onChange={(event) => {
-                  dispatch(setFinishedValue(event.target.checked));
+                  dispatch(updateEncounterFinished(event.target.checked));
                 }}
               />
             </label>
           </div>
         </div>
         <div className="flex flex-row items-end ml-16">
-          <button className="btn btn-error" onClick={startEncounterCallback}>
-            Delete (TODO)
+          <button className="btn btn-error" onClick={deleteEncounterCallback}>
+            Delete
           </button>
         </div>
       </div>

@@ -1,11 +1,9 @@
 import React from 'react';
+
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { ReducerNames } from '../../../store/reducers/reducerNames';
-import { removeEntity, selectEncounter } from '../../../store/reducers/encountersReducer';
+import { removeMonster, selectEncounter } from '../../../store/reducers/encountersReducer';
 import { Page, setPage } from '../../../store/reducers/globalReducer';
-import { IconButton } from '@mui/material';
-import { Delete } from '@mui/icons-material';
-import { setPlayEncounter } from '../../../store/reducers/encounterPlayReducer';
+import { ReducerNames } from '../../../store/reducers/reducerNames';
 
 export const ListMonsters = () => {
   const { encounters, selectedEncounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
@@ -14,15 +12,13 @@ export const ListMonsters = () => {
   const currentEncounter = encounters.find((encounter) => encounter.id === selectedEncounter);
   if (!currentEncounter) {
     dispatch(selectEncounter(null));
-    dispatch(setPage(Page.ENCOUNTERS));
+    dispatch(setPage(Page.ENCOUNTERS_LIST));
 
     // The fuck
     return <div></div>;
   }
 
-  const { entities } = currentEncounter;
-
-  const monsters = entities.filter((entity) => !entity.isPlayerCharacter);
+  const { monsters } = currentEncounter;
 
   if (monsters.length === 0) {
     return <p className="prose-md">No monsters added.</p>;
@@ -35,7 +31,7 @@ export const ListMonsters = () => {
           <div className="flex items-center">
             <button
               className="btn btn-sm btn-circle btn-outline btn-ghost my-0 mr-4"
-              onClick={() => dispatch(removeEntity(monster.id))}
+              onClick={() => dispatch(removeMonster(monster.id))}
             >
               <svg
                 className="w-5 h-5 fill-error hover:fill-base-100"
