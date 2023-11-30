@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import { Modal } from '../../../../components';
-import { useAppDispatch } from '../../../../store/hooks';
+import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { addEffect } from '../../../../store/reducers/encounterPlayReducer';
+import { ReducerNames } from '../../../../store/reducers/reducerNames';
 import { hideModal } from '../../../../utilities/modal';
 
 export const ADD_TEMPORARY_EFFECT_MODAL_ID = 'add_temporary_effect_modal_id';
@@ -12,6 +13,8 @@ const EFFECT_DURATION_FORM_ID = 'add_temporary_effect_effect_duration_form_id';
 
 export const AddTemporaryEffectModal = () => {
   const dispatch = useAppDispatch();
+
+  const { currentTurn } = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
 
   const [effectName, setEffectName] = useState('');
   const [duration, setDuration] = useState('');
@@ -24,6 +27,7 @@ export const AddTemporaryEffectModal = () => {
       dispatch(
         addEffect({
           type: 'progress',
+          startedWith: currentTurn,
           name: effectName,
           duration: durationInt,
         }),

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useAppDispatch } from '../../../store/hooks';
 import { EncounterPlayEntity, nextRound, previousRound } from '../../../store/reducers/encounterPlayReducer';
-import { ConditionsAndEffectsPanel, ConditionsDropdown } from './conditions';
+import { ActiveConditionDescriptionModal, ConditionsAndEffectsPanel, ConditionsDropdown } from './conditions';
 import { ChangeHealthPanel } from './health';
 import { NamePanel } from './NamePanel';
 
@@ -43,6 +43,7 @@ export const Entity = (props: EntityProps) => {
             <div className="divider divider-horizontal" />
 
             <div className="flex-grow">
+              <ActiveConditionDescriptionModal />
               <ConditionsAndEffectsPanel entity={entity} />
             </div>
 

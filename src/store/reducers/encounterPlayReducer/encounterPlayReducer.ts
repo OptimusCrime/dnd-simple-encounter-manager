@@ -73,9 +73,32 @@ const encounterPlayReducer = createSlice({
         };
       });
 
+      const queue = new InitiativeQueue(state.entities);
+
+      const nextTurnResponse = queue.findNextTurn(state.currentTurn);
+      if (nextTurnResponse === null) {
+        // Panic! at the disco
+        return;
+      }
+
+      const { current, passed } = nextTurnResponse;
+
       state.effects = state.effects.map((effect) => {
         if (effect.type === 'lasting') {
           return effect;
+        }
+
+        const increaseProgress = passed.includes(effect.startedWith);
+
+        if (!increaseProgress) {
+          return effect;
+        }
+
+        if (!effect.initialRoundPassed) {
+          return {
+            ...effect,
+            initialRoundPassed: true,
+          };
         }
 
         const progress = effect.progress === effect.duration ? effect.duration : effect.progress + 1;
@@ -88,18 +111,10 @@ const encounterPlayReducer = createSlice({
         };
       });
 
-      const queue = new InitiativeQueue(state.entities);
-
-      const nextEntityElement = queue.findNextTurn(state.currentTurn);
-      if (nextEntityElement === null) {
-        // Panic! at the disco
-        return;
-      }
-
-      state.currentTurn = nextEntityElement.id;
+      state.currentTurn = current.id;
 
       // If the next entity is the first entity, then we are on the next round
-      if (nextEntityElement.isFirstElement) {
+      if (current.isFirstElement) {
         state.round++;
       }
     },
@@ -112,21 +127,29 @@ const encounterPlayReducer = createSlice({
     previousRound(state) {
       const queue = new InitiativeQueue(state.entities);
 
-      const nextEntityElement = queue.findPreviousTurn(state.currentTurn);
-      if (nextEntityElement === null) {
+      const previousTurnResponse = queue.findPreviousTurn(state.currentTurn);
+      if (previousTurnResponse === null) {
         // Panic! at the disco
         return;
       }
 
-      state.currentTurn = nextEntityElement.id;
+      const { current, passed } = previousTurnResponse;
+
+      state.currentTurn = current.id;
 
       // If we moved to the last element, we wrapped around, and we should remove a round
-      if (nextEntityElement.isLastElement && state.round > 0) {
+      if (current.isLastElement && state.round > 0) {
         state.round--;
       }
 
       state.effects = state.effects.map((effect) => {
         if (effect.type === 'lasting') {
+          return effect;
+        }
+
+        const increaseProgress = passed.includes(effect.startedWith);
+
+        if (!increaseProgress || !effect.initialRoundPassed) {
           return effect;
         }
 
@@ -197,7 +220,9 @@ const encounterPlayReducer = createSlice({
           id: nanoid(),
           type: 'progress',
           name: action.payload.name,
+          startedWith: action.payload.startedWith,
           active: true,
+          initialRoundPassed: false,
           // Each round in combat takes 6 seconds. An effect lasting 60 seconds lasts for 10 rounds
           duration: Math.round(action.payload.duration / 6),
           progress: 0,
@@ -223,6 +248,27 @@ const encounterPlayReducer = createSlice({
      */
     deleteEffect(state, action: PayloadAction<string>) {
       state.effects = state.effects.filter((effect) => effect.id !== action.payload);
+    },
+
+    /**
+     * Reset the total progress for an effect.
+     *
+     * @param state
+     * @param action
+     */
+    resetEffect(state, action: PayloadAction<string>) {
+      state.effects = state.effects.map((effect) => {
+        if (effect.id !== action.payload) {
+          return effect;
+        }
+
+        return {
+          ...effect,
+          progress: 0,
+          actualProgress: 0,
+          initialRoundPassed: false,
+        };
+      });
     },
 
     /**
@@ -295,6 +341,9 @@ const encounterPlayReducer = createSlice({
         ...state.entities.slice(action.payload.order - 1),
       ];
     },
+    setActiveConditionClicked(state, action: PayloadAction<Condition | null>) {
+      state.clickedActiveCondition = action.payload;
+    },
   },
 });
 
@@ -306,9 +355,11 @@ export const {
   updateCondition,
   addEffect,
   deleteEffect,
+  resetEffect,
   updateEffectProgress,
   addOrDeleteAffected,
   addNewMonster,
+  setActiveConditionClicked,
 } = encounterPlayReducer.actions;
 
 export default encounterPlayReducer.reducer;

@@ -3,6 +3,7 @@ import React from 'react';
 import { useAppSelector } from '../../../../store/hooks';
 import { EncounterPlayEffect, EncounterPlayEntity } from '../../../../store/reducers/encounterPlayReducer';
 import { ReducerNames } from '../../../../store/reducers/reducerNames';
+import { ConditionsPanel } from './ConditionsPanel';
 
 interface ConditionsAndEffectsPanelProps {
   entity: EncounterPlayEntity;
@@ -22,7 +23,7 @@ export const ConditionsAndEffectsPanel = (props: ConditionsAndEffectsPanelProps)
   return (
     <div className="flex flex-col space-y-2">
       <div>
-        <strong>Conditions:</strong> {entity.conditions.length === 0 ? <i>None</i> : entity.conditions.join(', ')}
+        <strong>Conditions:</strong> <ConditionsPanel conditions={entity.conditions} />
       </div>
       <div>
         <strong>Effects:</strong>{' '}

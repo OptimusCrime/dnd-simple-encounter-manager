@@ -1,6 +1,6 @@
 import { getItem } from '../../../utilities/localStorage';
 import { ReducerNames } from '../reducerNames';
-import { EncounterPlayEffect, EncounterPlayEntity } from './types';
+import { Condition, EncounterPlayEffect, EncounterPlayEntity } from './types';
 
 interface EncounterPlayState {
   name: string;
@@ -8,6 +8,7 @@ interface EncounterPlayState {
   currentTurn: string;
   entities: EncounterPlayEntity[];
   effects: EncounterPlayEffect[];
+  clickedActiveCondition: Condition | null;
 }
 
 const fallbackInitialState: EncounterPlayState = {
@@ -16,6 +17,7 @@ const fallbackInitialState: EncounterPlayState = {
   round: 1,
   entities: [],
   effects: [],
+  clickedActiveCondition: null,
 };
 
 export const getInitialState = (): EncounterPlayState => {

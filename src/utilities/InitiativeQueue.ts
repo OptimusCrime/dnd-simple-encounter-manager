@@ -1,5 +1,10 @@
 import { EncounterPlayEntity } from '../store/reducers/encounterPlayReducer';
 
+interface FindResponseType {
+  current: Element;
+  passed: string[];
+}
+
 /**
  * This is a weird attempt at creating a circular linked list in JavaScript...
  */
@@ -37,11 +42,11 @@ export class InitiativeQueue {
     this.list = list;
   }
 
-  findNextTurn(id: string): null | Element {
+  findNextTurn(id: string): FindResponseType | null {
     return this.find(id, 'up');
   }
 
-  findPreviousTurn(id: string): null | Element {
+  findPreviousTurn(id: string): FindResponseType | null {
     return this.find(id, 'down');
   }
 
@@ -54,7 +59,7 @@ export class InitiativeQueue {
    * @param id
    * @param direction
    */
-  find(id: string, direction: 'up' | 'down'): null | Element {
+  find(id: string, direction: 'up' | 'down'): FindResponseType | null {
     // Sanity check. Make sure that not all entities are dead!
     const allDead = this.list.every((element) => !element.enabled);
     if (allDead) {
@@ -68,6 +73,7 @@ export class InitiativeQueue {
 
     // Let's keep track of where we started to avoid crashing the page
     const currentId = id;
+    const passed: string[] = [currentTurnEntity.id];
 
     let nextEntityId = direction === 'up' ? currentTurnEntity.child : currentTurnEntity.parent;
 
@@ -79,8 +85,13 @@ export class InitiativeQueue {
       }
 
       if (nextEntityFind.enabled) {
-        return nextEntityFind;
+        return {
+          current: nextEntityFind,
+          passed: passed,
+        };
       }
+
+      passed.push(nextEntityFind.id);
 
       nextEntityId = direction === 'up' ? nextEntityFind.child : nextEntityFind.parent;
 

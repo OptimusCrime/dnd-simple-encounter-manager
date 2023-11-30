@@ -42,7 +42,7 @@ export const EffectListItem = (props: EffectListItemProps) => {
         <div className="flex flex-col">
           <h4 className="text-xl p-0 m-0">{effect.name}</h4>
           <div className="flex flex-col space-y-2 pt-4">
-            <div className="flex flex-col space-y-2 prose">
+            <div className="flex flex-col space-y-4 prose">
               <EffectInformationBlock effect={effect} />
               <div>
                 <strong>Affected:</strong>
@@ -50,7 +50,7 @@ export const EffectListItem = (props: EffectListItemProps) => {
                 {affectedEntities.length === 0 ? 'Nobody' : affectedEntities.join(', ')}
               </div>
             </div>
-            <div>
+            <div className="pt-2">
               <EffectsProgressBar effect={effect} />
             </div>
             <div className="pt-2">

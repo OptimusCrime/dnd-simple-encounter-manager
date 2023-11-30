@@ -37,9 +37,11 @@ interface EffectBase {
 
 export interface EffectProgress {
   type: 'progress';
+  startedWith: string;
   duration: number;
   progress: number;
   actualProgress: number;
+  initialRoundPassed: boolean;
 }
 
 export interface EffectLasting {

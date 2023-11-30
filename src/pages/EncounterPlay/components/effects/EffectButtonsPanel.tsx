@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Dropdown } from '../../../../components';
 import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
-import { deleteEffect, EncounterPlayEffect } from '../../../../store/reducers/encounterPlayReducer';
+import { deleteEffect, EncounterPlayEffect, resetEffect } from '../../../../store/reducers/encounterPlayReducer';
 import { ReducerNames } from '../../../../store/reducers/reducerNames';
 import { ChangeAffectedByEffectDropdownItem } from './ChangeAffectedByEffectDropdownItem';
 
@@ -17,11 +17,14 @@ export const EffectButtonsPanel = (props: EffectButtonPanelProps) => {
 
   return (
     <div className="flex flex-row justify-between">
-      <Dropdown text="Change affected">
+      <Dropdown text="Change affected" className="bg-base-100">
         {entities.map((entity) => (
           <ChangeAffectedByEffectDropdownItem key={entity.id} entity={entity} effect={effect} />
         ))}
       </Dropdown>
+      <button className="btn bg-base-100" onClick={() => dispatch(resetEffect(effect.id))}>
+        Reset progress
+      </button>
       <button className="btn bg-base-100" onClick={() => dispatch(deleteEffect(effect.id))}>
         Delete effect
       </button>
