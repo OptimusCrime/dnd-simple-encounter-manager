@@ -75,7 +75,7 @@ export class InitiativeQueue {
     const currentId = id;
     const passed: string[] = [currentTurnEntity.id];
 
-    let nextEntityId = direction === 'up' ? currentTurnEntity.child : currentTurnEntity.parent;
+    let nextEntityId: string = direction === 'up' ? currentTurnEntity.child : currentTurnEntity.parent;
 
     while (true) {
       const nextEntityFind = this.list.find((element) => element.id === nextEntityId);
