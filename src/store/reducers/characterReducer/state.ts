@@ -1,12 +1,13 @@
 import { getItem } from '../../../utilities/localStorage';
 import { ReducerNames } from '../reducerNames';
+import { CharacterSet } from './types';
 
 export interface CharactersState {
-  characters: string[];
+  sets: CharacterSet[];
 }
 
 const fallbackInitialState: CharactersState = {
-  characters: [],
+  sets: [],
 };
 
 export const getInitialState = (): CharactersState => {

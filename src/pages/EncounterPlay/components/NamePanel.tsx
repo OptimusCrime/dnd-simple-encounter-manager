@@ -13,7 +13,12 @@ export const NamePanel = (props: NamePanelProps) => {
   return (
     <div className="flex flex-col">
       <div>
-        <strong>{index + 1}.</strong> {entity.name}
+        <span className="text-base">
+          <strong>
+            {index + 1}. {entity.name}
+          </strong>
+        </span>
+
         {entity.isSurprised && (
           <>
             {' '}

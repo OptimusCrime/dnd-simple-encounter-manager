@@ -38,7 +38,6 @@ export const AddMonster = () => {
         </label>
         <input
           type="text"
-          placeholder="Goblin"
           id="monster-name"
           className="input input-bordered w-full max-w-xs"
           ref={monsterNameInputFieldRef}
@@ -47,14 +46,19 @@ export const AddMonster = () => {
 
       <div className="form-control w-full max-w-xs mr-4">
         <label className="label" htmlFor="monster-start-health">
-          <span className="label-text">Monster start health</span>
+          <span className="label-text">Monster start health (e.g. 2d6 + 2)</span>
         </label>
         <input
           type="text"
-          placeholder="12d10+54"
           id="monster-start-health"
           className="input input-bordered w-full max-w-xs"
           ref={monsterStartHealthInputFieldRef}
+          onKeyUp={(event) => {
+            if (event.key.toLowerCase() === 'enter') {
+              addMonsterCallback();
+              monsterNameInputFieldRef.current?.focus();
+            }
+          }}
         />
       </div>
 
@@ -69,6 +73,12 @@ export const AddMonster = () => {
           defaultValue={1}
           className="input input-bordered w-full max-w-xs"
           ref={monsterCloneInputFieldRef}
+          onKeyUp={(event) => {
+            if (event.key.toLowerCase() === 'enter') {
+              addMonsterCallback();
+              monsterNameInputFieldRef.current?.focus();
+            }
+          }}
         />
       </div>
 

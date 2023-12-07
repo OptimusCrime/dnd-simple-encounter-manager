@@ -1,2 +1,2 @@
 export { ListCharacters } from './ListCharacters';
-export { NewCharacter } from './NewCharacter';
+export { NewCharacterSet } from './NewCharacterSet';

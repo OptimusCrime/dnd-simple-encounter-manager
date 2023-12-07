@@ -6,24 +6,24 @@ import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { beginEncounter } from '../../store/reducers/encounterPlayReducer';
 import { Page, setPage } from '../../store/reducers/globalReducer';
 import { ReducerNames } from '../../store/reducers/reducerNames';
-import { showModal } from '../../utilities/modal';
-import { InitialDamageTakenInputField, InitiativeInputField, NoSortingWarningModal, SortingArrows } from './components';
+import { InitialDamageTakenInputField, InitiativeInputField, SortingArrows } from './components';
 import { mapEncounterToInitiativeState } from './mappers';
 import { InitiativeEntityState, InitiativeMoveDirection } from './types';
 import { calculatePlacementSwapValues, sortEntitiesByInitiative } from './utilities';
-
-const NO_SORTING_WARNING_MODAL_ID = 'no_sorting_warning_modal_id';
 
 export const EncounterInitiative = () => {
   const dispatch = useAppDispatch();
 
   const { encounters, selectedEncounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
-  const { characters } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
+  const { sets } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
 
   const encounter = encounters.find((encounter) => encounter.id === selectedEncounter) ?? null;
+  const defaultSet = sets.length === 0 ? null : sets[0];
 
   const [hasSorted, setHasSorted] = useState<boolean>(false);
-  const [state, setState] = useState<InitiativeEntityState[]>(mapEncounterToInitiativeState(encounter, characters));
+  const [state, setState] = useState<InitiativeEntityState[]>(
+    mapEncounterToInitiativeState(encounter, defaultSet === null ? [] : defaultSet.characters),
+  );
 
   if (encounter === null) {
     dispatch(setPage(Page.ENCOUNTERS_LIST));
@@ -135,30 +135,52 @@ export const EncounterInitiative = () => {
           </li>
         ))}
       </ul>
-      <div className="flex justify-between pt-4">
-        <button className="btn btn-info" onClick={sortBasedOnInitiativeValuesCallback}>
-          Update sort
-        </button>
+      <div className="flex w-full justify-between items-end">
+        {sets.length > 0 && (
+          <div className="form-control w-full max-w-xs">
+            <label className="label">
+              <span className="label-text">Select character set</span>
+            </label>
+            <select
+              className="select select-bordered"
+              onChange={(event) => {
+                const set = sets.find((set) => set.id === event.target.value);
+                if (!set) {
+                  return;
+                }
 
-        <button
-          className="btn btn-success"
-          onClick={() => {
-            if (hasSorted) {
-              return startEncounterCallback();
-            }
+                setState(mapEncounterToInitiativeState(encounter, set.characters));
+              }}
+              defaultValue={defaultSet?.id}
+            >
+              {sets.map((set) => (
+                <option value={set.id} key={set.id}>
+                  {set.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
-            showModal(NO_SORTING_WARNING_MODAL_ID);
-          }}
-        >
-          Begin encounter
-        </button>
+        <div className="flex space-x-4">
+          <button className="btn btn-info" onClick={sortBasedOnInitiativeValuesCallback}>
+            Update sort
+          </button>
+
+          {hasSorted && (
+            <button
+              className="btn btn-success"
+              onClick={() => {
+                if (hasSorted) {
+                  return startEncounterCallback();
+                }
+              }}
+            >
+              Begin encounter
+            </button>
+          )}
+        </div>
       </div>
-      <NoSortingWarningModal
-        id={NO_SORTING_WARNING_MODAL_ID}
-        startEncounter={() => {
-          startEncounterCallback();
-        }}
-      />
     </div>
   );
 };

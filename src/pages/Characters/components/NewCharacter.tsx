@@ -3,13 +3,24 @@ import React from 'react';
 import { useAppDispatch } from '../../../store/hooks';
 import { addCharacter } from '../../../store/reducers/characterReducer';
 
-export const NewCharacter = () => {
+interface NewCharacterProps {
+  setId: string;
+}
+
+export const NewCharacter = (props: NewCharacterProps) => {
+  const { setId } = props;
+
   const dispatch = useAppDispatch();
   const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
   const addCharacterCallback = () => {
     if (inputFieldRef?.current && inputFieldRef.current?.value.length > 0) {
-      dispatch(addCharacter(inputFieldRef.current.value));
+      dispatch(
+        addCharacter({
+          set: setId,
+          character: inputFieldRef.current.value,
+        }),
+      );
       inputFieldRef.current.value = '';
     }
   };
@@ -22,7 +33,6 @@ export const NewCharacter = () => {
         </label>
         <input
           type="text"
-          placeholder="Sildar Stormwind"
           id="new-character"
           className="input input-bordered w-full max-w-xs"
           ref={inputFieldRef}

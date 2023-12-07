@@ -61,7 +61,6 @@ export const EncounterInformation = () => {
             <input
               defaultValue={name}
               type="text"
-              placeholder="Goblin ambush"
               id="encounter-name"
               className="input input-bordered w-full max-w-xs"
               ref={encounterNameInputFieldRef}

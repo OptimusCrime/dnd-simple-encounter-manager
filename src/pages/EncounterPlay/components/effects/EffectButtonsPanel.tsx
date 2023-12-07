@@ -18,9 +18,11 @@ export const EffectButtonsPanel = (props: EffectButtonPanelProps) => {
   return (
     <div className="flex flex-row justify-between">
       <Dropdown text="Change affected" className="bg-base-100">
-        {entities.map((entity) => (
-          <ChangeAffectedByEffectDropdownItem key={entity.id} entity={entity} effect={effect} />
-        ))}
+        {entities
+          .filter((entity) => !entity.isDead)
+          .map((entity) => (
+            <ChangeAffectedByEffectDropdownItem key={entity.id} entity={entity} effect={effect} />
+          ))}
       </Dropdown>
       <button className="btn bg-base-100" onClick={() => dispatch(resetEffect(effect.id))}>
         Reset progress

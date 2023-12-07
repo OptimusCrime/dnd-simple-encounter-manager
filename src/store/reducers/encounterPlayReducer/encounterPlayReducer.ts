@@ -264,6 +264,7 @@ const encounterPlayReducer = createSlice({
 
         return {
           ...effect,
+          startedWith: state.currentTurn,
           progress: 0,
           actualProgress: 0,
           initialRoundPassed: false,

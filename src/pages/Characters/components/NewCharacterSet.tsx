@@ -1,16 +1,15 @@
 import React from 'react';
 
 import { useAppDispatch } from '../../../store/hooks';
-import { addEncounter } from '../../../store/reducers/encountersReducer';
+import { addCharacterSet } from '../../../store/reducers/characterReducer';
 
-export const NewEncounter = () => {
+export const NewCharacterSet = () => {
   const dispatch = useAppDispatch();
-
   const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
 
-  const addEncounterCallback = () => {
+  const addCharacterSetCallback = () => {
     if (inputFieldRef?.current && inputFieldRef.current?.value.length > 0) {
-      dispatch(addEncounter(inputFieldRef.current.value));
+      dispatch(addCharacterSet(inputFieldRef.current.value));
       inputFieldRef.current.value = '';
     }
   };
@@ -18,23 +17,23 @@ export const NewEncounter = () => {
   return (
     <div className="flex flex-row items-end">
       <div className="form-control w-full max-w-xs mr-4">
-        <label className="label" htmlFor="new-encounter">
-          <span className="label-text">Encounter name</span>
+        <label className="label" htmlFor="new-character">
+          <span className="label-text">Character set name</span>
         </label>
         <input
           type="text"
-          id="new-encounter"
+          id="new-character"
           className="input input-bordered w-full max-w-xs"
           ref={inputFieldRef}
           onKeyUp={(event) => {
             if (event.key.toLowerCase() === 'enter') {
-              addEncounterCallback();
+              addCharacterSetCallback();
             }
           }}
         />
       </div>
-      <button className="btn bg-base-100" onClick={addEncounterCallback}>
-        Create
+      <button className="btn bg-base-100" onClick={addCharacterSetCallback}>
+        Add
       </button>
     </div>
   );

@@ -69,7 +69,6 @@ export const AddMonsterModal = () => {
             <input
               id={MONSTER_NAME_FORM_ID}
               type="text"
-              placeholder="Adult Black Dragon"
               className="input input-bordered w-full"
               defaultValue=""
               onChange={(event) => setMonsterName(event.target.value)}
@@ -78,12 +77,11 @@ export const AddMonsterModal = () => {
 
           <div className="form-control w-full">
             <label className="label" htmlFor={MONSTER_HEALTH_FORM_ID}>
-              <span className="label-text">Monster start health</span>
+              <span className="label-text">Monster start health (e.g. 2d6 + 2)</span>
             </label>
             <input
               id={MONSTER_HEALTH_FORM_ID}
               type="text"
-              placeholder="12d10+54"
               className="input input-bordered w-full"
               defaultValue=""
               onChange={(event) => setMonsterHealth(event.target.value)}

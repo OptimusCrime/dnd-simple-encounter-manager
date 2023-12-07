@@ -12,7 +12,7 @@ export const getName = (entity: InitiativeEntityState, entities: InitiativeEntit
   }
 
   // Multiple names, find out current order
-  const index = entitiesWithSameName.findIndex((e) => e.order === entity.order);
+  const index = entities.findIndex((e) => e.order === entity.order);
 
   // I guess this can never happen, but who cares
   if (index === -1) {

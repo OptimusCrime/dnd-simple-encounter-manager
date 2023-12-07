@@ -16,10 +16,10 @@ const encountersReducer = createSlice({
      * @param state
      * @param action
      */
-    addEncounter(state, action: PayloadAction<{ name: string; players: string[] }>) {
+    addEncounter(state, action: PayloadAction<string>) {
       state.encounters.push({
         id: nanoid(),
-        name: action.payload.name,
+        name: action.payload,
         ready: false,
         finished: false,
         monsters: [],
