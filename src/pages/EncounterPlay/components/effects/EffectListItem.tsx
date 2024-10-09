@@ -23,10 +23,10 @@ const mapAffectedEntities = (affected: string[], entities: EncounterPlayEntity[]
       continue;
     }
 
-    affectedEntities.push(entity.name);
+    affectedEntities.push(`${entity.name} (${entity.number})`);
   }
 
-  return affectedEntities.sort();
+  return affectedEntities;
 };
 
 export const EffectListItem = (props: EffectListItemProps) => {

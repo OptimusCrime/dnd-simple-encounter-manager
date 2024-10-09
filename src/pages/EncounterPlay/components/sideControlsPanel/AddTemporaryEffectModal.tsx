@@ -11,13 +11,15 @@ export const ADD_TEMPORARY_EFFECT_MODAL_ID = 'add_temporary_effect_modal_id';
 const EFFECT_NAME_FORM_ID = 'add_temporary_effect_effect_name_form_id';
 const EFFECT_DURATION_FORM_ID = 'add_temporary_effect_effect_duration_form_id';
 
+const DEFAULT_DURATION_VALUE = '60';
+
 export const AddTemporaryEffectModal = () => {
   const dispatch = useAppDispatch();
 
   const { currentTurn } = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
 
   const [effectName, setEffectName] = useState('');
-  const [duration, setDuration] = useState('');
+  const [duration, setDuration] = useState(DEFAULT_DURATION_VALUE);
 
   const submit = () => {
     let success = false;
@@ -27,7 +29,7 @@ export const AddTemporaryEffectModal = () => {
       dispatch(
         addEffect({
           type: 'progress',
-          startedWith: currentTurn,
+          anchor: currentTurn,
           name: effectName,
           duration: durationInt,
         }),
@@ -38,7 +40,7 @@ export const AddTemporaryEffectModal = () => {
 
     if (success) {
       setEffectName('');
-      setDuration('');
+      setDuration(DEFAULT_DURATION_VALUE);
 
       (document.getElementById(EFFECT_NAME_FORM_ID) as HTMLInputElement).value = '';
       (document.getElementById(EFFECT_DURATION_FORM_ID) as HTMLInputElement).value = '';
@@ -53,33 +55,41 @@ export const AddTemporaryEffectModal = () => {
 
       <div className="flex flex-col space-y-4 pt-4">
         <div className="space-y-4">
-          <input
-            id={EFFECT_NAME_FORM_ID}
-            type="text"
-            placeholder="Effect name"
-            className="input input-bordered w-full"
-            defaultValue=""
-            onChange={(event) => setEffectName(event.target.value)}
-            onKeyUp={(event) => {
-              if (event.key.toLowerCase() === 'enter') {
-                submit();
-              }
-            }}
-          />
+          <div className="form-control w-full mr-4">
+            <label className="label" htmlFor={EFFECT_NAME_FORM_ID}>
+              <span className="label-text">Effect name</span>
+            </label>
+            <input
+              id={EFFECT_NAME_FORM_ID}
+              type="text"
+              className="input input-bordered w-full"
+              defaultValue=""
+              onChange={(event) => setEffectName(event.target.value)}
+              onKeyUp={(event) => {
+                if (event.key.toLowerCase() === 'enter') {
+                  submit();
+                }
+              }}
+            />
+          </div>
 
-          <input
-            id={EFFECT_DURATION_FORM_ID}
-            type="text"
-            placeholder="Duration (seconds)"
-            className="input input-bordered w-full"
-            defaultValue=""
-            onChange={(event) => setDuration(event.target.value)}
-            onKeyUp={(event) => {
-              if (event.key.toLowerCase() === 'enter') {
-                submit();
-              }
-            }}
-          />
+          <div className="form-control w-full mr-4">
+            <label className="label" htmlFor={EFFECT_DURATION_FORM_ID}>
+              <span className="label-text">Duration (seconds)</span>
+            </label>
+            <input
+              id={EFFECT_DURATION_FORM_ID}
+              type="text"
+              className="input input-bordered w-full"
+              defaultValue="60"
+              onChange={(event) => setDuration(event.target.value)}
+              onKeyUp={(event) => {
+                if (event.key.toLowerCase() === 'enter') {
+                  submit();
+                }
+              }}
+            />
+          </div>
         </div>
         <div className="flex flex-row space-x-4 justify-end">
           <button className="btn" onClick={() => hideModal(ADD_TEMPORARY_EFFECT_MODAL_ID)}>

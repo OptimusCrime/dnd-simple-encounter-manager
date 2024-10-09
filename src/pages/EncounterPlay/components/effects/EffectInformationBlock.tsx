@@ -9,8 +9,8 @@ interface EffectInformationInformationProps {
   effect: EncounterPlayEffect;
 }
 
-const mapEffectStartedWithToEntityName = (startedWith: string, entities: EncounterPlayEntity[]): string => {
-  const entity = entities.find((entity) => entity.id === startedWith);
+const mapEffectAnchorToEntityName = (anchor: string, entities: EncounterPlayEntity[]): string => {
+  const entity = entities.find((entity) => entity.id === anchor);
   if (!entity) {
     return 'Unknown';
   }
@@ -42,7 +42,7 @@ export const EffectInformationBlock = (props: EffectInformationInformationProps)
         </div>
         <div className="flex flex-row justify-between">
           <div className="w-1/2">
-            <strong>Started with:</strong>&nbsp;{mapEffectStartedWithToEntityName(effect.startedWith, entities)}
+            <strong>Started with:</strong>&nbsp;{mapEffectAnchorToEntityName(effect.anchor, entities)}
           </div>
           <div className="w-1/2">
             <strong>Duration:</strong>&nbsp;{effect.duration * SECONDS_PER_ROUND}s

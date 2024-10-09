@@ -1,17 +1,17 @@
 import { DropdownItemToggle } from '../../../../components';
 import { useAppDispatch } from '../../../../store/hooks';
 import {
-  addOrDeleteEffectAffected,
+  changeEffectAnchor,
   EncounterPlayEffect,
   EncounterPlayEntity,
 } from '../../../../store/reducers/encounterPlayReducer';
 
-interface ChangeAffectedByEffectDropdownItemProps {
+interface ChangeAnchorEffectDropdownItemProps {
   effect: EncounterPlayEffect;
   entity: EncounterPlayEntity;
 }
 
-export const ChangeAffectedByEffectDropdownItem = (props: ChangeAffectedByEffectDropdownItemProps) => {
+export const ChangeAnchorEffectDropdownItem = (props: ChangeAnchorEffectDropdownItemProps) => {
   const dispatch = useAppDispatch();
 
   const { entity, effect } = props;
@@ -20,13 +20,9 @@ export const ChangeAffectedByEffectDropdownItem = (props: ChangeAffectedByEffect
 
   const onClick = () => {
     dispatch(
-      addOrDeleteEffectAffected({
+      changeEffectAnchor({
         id: effect.id,
-        affected: {
-          id: entity.id,
-          name: entity.name,
-          enabled: !checked,
-        },
+        anchor: entity.id,
       }),
     );
   };

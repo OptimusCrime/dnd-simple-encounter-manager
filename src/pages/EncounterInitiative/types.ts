@@ -5,8 +5,8 @@ export interface InitiativeEntityState {
   startHealth: number | null;
   initialDamageTaken: number | null;
   isPlayerCharacter: boolean;
-  isSurprised: boolean;
   initiative: number | null;
+  notes: string | null;
 }
 
 export enum InitiativeMoveDirection {

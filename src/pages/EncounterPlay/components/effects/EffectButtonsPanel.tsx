@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../../../store/hooks';
 import { deleteEffect, EncounterPlayEffect, resetEffect } from '../../../../store/reducers/encounterPlayReducer';
 import { ReducerNames } from '../../../../store/reducers/reducerNames';
 import { ChangeAffectedByEffectDropdownItem } from './ChangeAffectedByEffectDropdownItem';
+import { ChangeAnchorEffectDropdownItem } from './ChangeAnchorEffectDropdownItem';
 
 interface EffectButtonPanelProps {
   effect: EncounterPlayEffect;
@@ -17,18 +18,25 @@ export const EffectButtonsPanel = (props: EffectButtonPanelProps) => {
 
   return (
     <div className="flex flex-row justify-between">
-      <Dropdown text="Change affected" className="bg-base-100">
+      <Dropdown text="Affected" className="bg-base-100">
         {entities
           .filter((entity) => !entity.isDead)
           .map((entity) => (
             <ChangeAffectedByEffectDropdownItem key={entity.id} entity={entity} effect={effect} />
           ))}
       </Dropdown>
+      <Dropdown text="Anchor" className="bg-base-100">
+        {entities
+          .filter((entity) => !entity.isDead)
+          .map((entity) => (
+            <ChangeAnchorEffectDropdownItem key={entity.id} entity={entity} effect={effect} />
+          ))}
+      </Dropdown>
       <button className="btn bg-base-100" onClick={() => dispatch(resetEffect(effect.id))}>
-        Reset progress
+        Reset
       </button>
       <button className="btn bg-base-100" onClick={() => dispatch(deleteEffect(effect.id))}>
-        Delete effect
+        Delete
       </button>
     </div>
   );

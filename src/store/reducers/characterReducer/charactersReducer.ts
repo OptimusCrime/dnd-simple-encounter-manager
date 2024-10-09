@@ -69,9 +69,14 @@ const charactersReducer = createSlice({
         };
       });
     },
+
+    selectCharacterSet(state, action: PayloadAction<string | null>) {
+      state.selectedSet = action.payload;
+    },
   },
 });
 
-export const { addCharacterSet, removeCharacterSet, addCharacter, removeCharacter } = charactersReducer.actions;
+export const { addCharacterSet, removeCharacterSet, addCharacter, removeCharacter, selectCharacterSet } =
+  charactersReducer.actions;
 
 export default charactersReducer.reducer;

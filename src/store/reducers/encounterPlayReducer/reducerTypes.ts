@@ -1,6 +1,6 @@
 interface AddEffectProgress {
   type: 'progress';
-  startedWith: string;
+  anchor: string;
   name: string;
   duration: number;
 }

@@ -2,15 +2,22 @@ import cx from 'classnames';
 import React from 'react';
 
 import { useAppDispatch } from '../../../store/hooks';
-import { EncounterPlayEntity, nextRound, previousRound } from '../../../store/reducers/encounterPlayReducer';
-import { ActiveConditionDescriptionModal, ConditionsAndEffectsPanel, ConditionsDropdown } from './conditions';
+import {
+  EncounterPlayEffect,
+  EncounterPlayEntity,
+  nextRound,
+  previousRound,
+} from '../../../store/reducers/encounterPlayReducer';
+import { ActiveConditionDescriptionModal, ConditionsDropdown } from './conditions';
+import { ConditionsAndEffectsPanel, findEffectsForEntity } from './ConditionsAndEffectsPanel';
 import { ChangeHealthPanel } from './health';
 import { NamePanel } from './NamePanel';
+import { Notes } from './notes/Notes';
 
 interface EntityProps {
   entity: EncounterPlayEntity;
-  index: number;
   currentTurn: string;
+  effects: EncounterPlayEffect[];
 }
 
 const getBackgroundColor = (entity: EncounterPlayEntity, currentTurn: string): string => {
@@ -27,50 +34,74 @@ const getBackgroundColor = (entity: EncounterPlayEntity, currentTurn: string): s
 export const Entity = (props: EntityProps) => {
   const dispatch = useAppDispatch();
 
-  const { entity, currentTurn, index } = props;
+  const { entity, currentTurn, effects } = props;
 
   const className = getBackgroundColor(entity, currentTurn);
+  const effectsForEntity = findEffectsForEntity(effects, entity);
+  const conditionsForEntity = entity.conditions;
+  const hasEffectsOrConditions = effectsForEntity.length > 0 || conditionsForEntity.length > 0;
 
   return (
     <div className={cx('card text-neutral-content card-compact', className)}>
       <div className="card-body">
-        <div key={entity.id} className="space-y-4">
-          <div className="w-full flex flex-row justify-start">
-            <div className="min-w-[15rem]">
-              <NamePanel entity={entity} index={index} />
-            </div>
-
-            <div className="divider divider-horizontal" />
-
-            <div className="flex-grow">
-              <ActiveConditionDescriptionModal />
-              <ConditionsAndEffectsPanel entity={entity} />
-            </div>
-
-            <div className="divider divider-horizontal" />
-
-            <div className="flex flex-col justify-end">
-              <ConditionsDropdown entity={entity} />
-            </div>
-          </div>
+        <div key={entity.id} className="">
           <div className="w-full flex flex-row justify-between">
-            <div className="flex flex-row flex-grow">
-              <ChangeHealthPanel entity={entity} />
+            <div className="w-auto">
+              <NamePanel entity={entity} />
             </div>
-            <div className="flex flex-row justify-end">
-              {entity.id === currentTurn && (
+
+            <div className="flex flex-row">
+              {!entity.isPlayerCharacter && (
                 <>
-                  <div className="space-x-4">
-                    <button className="btn btn-info" onClick={() => dispatch(previousRound())}>
-                      Previous
-                    </button>
-                    <button className="btn btn-info" onClick={() => dispatch(nextRound())}>
-                      Next
-                    </button>
-                  </div>
+                  <div className="divider divider-horizontal" />
+
+                  <ChangeHealthPanel entity={entity} />
                 </>
               )}
+
+              <div className="divider divider-horizontal" />
+
+              <div className="flex flex-col">
+                <ConditionsDropdown entity={entity} />
+              </div>
+
+              <div className="divider divider-horizontal" />
+
+              <div className={cx('flex flex-row justify-end', { invisible: entity.id !== currentTurn })}>
+                <div className="space-x-4">
+                  <button className="btn btn-info" onClick={() => dispatch(previousRound())}>
+                    Previous
+                  </button>
+                  <button className="btn btn-info" onClick={() => dispatch(nextRound())}>
+                    Next
+                  </button>
+                </div>
+              </div>
             </div>
+          </div>
+
+          <div className="divider my-2" />
+
+          <ActiveConditionDescriptionModal />
+
+          <div className="w-full flex flex-row justify-between px-4">
+            {hasEffectsOrConditions ? (
+              <>
+                <div className="flex flex-row w-[40%]">
+                  <ConditionsAndEffectsPanel effects={effectsForEntity} conditions={conditionsForEntity} />
+                </div>
+                {entity.notes !== null && (
+                  <>
+                    <div className="flex w-[60%]">
+                      <div className="divider divider-horizontal" />
+                    </div>
+                    <Notes entity={entity} />
+                  </>
+                )}
+              </>
+            ) : (
+              <Notes entity={entity} />
+            )}
           </div>
         </div>
       </div>

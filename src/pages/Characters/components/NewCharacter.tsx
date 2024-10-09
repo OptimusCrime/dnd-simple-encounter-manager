@@ -4,11 +4,11 @@ import { useAppDispatch } from '../../../store/hooks';
 import { addCharacter } from '../../../store/reducers/characterReducer';
 
 interface NewCharacterProps {
-  setId: string;
+  currentSetId: string;
 }
 
 export const NewCharacter = (props: NewCharacterProps) => {
-  const { setId } = props;
+  const { currentSetId } = props;
 
   const dispatch = useAppDispatch();
   const inputFieldRef = React.useRef<null | HTMLInputElement>(null);
@@ -17,7 +17,7 @@ export const NewCharacter = (props: NewCharacterProps) => {
     if (inputFieldRef?.current && inputFieldRef.current?.value.length > 0) {
       dispatch(
         addCharacter({
-          set: setId,
+          set: currentSetId,
           character: inputFieldRef.current.value,
         }),
       );

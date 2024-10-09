@@ -34,20 +34,25 @@ export const AddLastingEffectModal = () => {
 
       <div className="flex flex-col space-y-4 pt-4">
         <div>
-          <input
-            id={EFFECT_NAME_FORM_ID}
-            type="text"
-            placeholder="Effect name"
-            className="input input-bordered w-full"
-            defaultValue=""
-            onChange={(event) => setEffectName(event.target.value)}
-            onKeyUp={(event) => {
-              if (event.key.toLowerCase() === 'enter') {
-                submit();
-              }
-            }}
-          />
+          <div className="form-control w-full mr-4">
+            <label className="label" htmlFor={EFFECT_NAME_FORM_ID}>
+              <span className="label-text">Effect name</span>
+            </label>
+            <input
+              id={EFFECT_NAME_FORM_ID}
+              type="text"
+              className="input input-bordered w-full"
+              defaultValue=""
+              onChange={(event) => setEffectName(event.target.value)}
+              onKeyUp={(event) => {
+                if (event.key.toLowerCase() === 'enter') {
+                  submit();
+                }
+              }}
+            />
+          </div>
         </div>
+
         <div className="flex flex-row space-x-4 justify-end">
           <button className="btn" onClick={() => hideModal(ADD_LASTING_EFFECT_MODAL_ID)}>
             Close

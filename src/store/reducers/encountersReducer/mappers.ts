@@ -5,7 +5,7 @@ import { AddMonsterPayload } from './reducerTypes';
 import { Monster } from './types';
 
 export const mapNewMonster = (monster: AddMonsterPayload): Monster[] => {
-  const { name, startHealth, clones } = monster;
+  const { name, startHealth, clones, notes } = monster;
 
   const newMonsters: Monster[] = [];
 
@@ -14,6 +14,7 @@ export const mapNewMonster = (monster: AddMonsterPayload): Monster[] => {
       id: nanoid(),
       name: name,
       startHealth: calculateHealth(startHealth),
+      notes: notes,
     });
   }
 

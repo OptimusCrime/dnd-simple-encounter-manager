@@ -35,10 +35,12 @@ export const EncounterEdit = () => {
       <div className="mt-8">
         <Heading text={`Monsters (${monsters.length})`} />
         <div className="card bg-neutral text-neutral-content card-compact">
-          <div className="card-body prose">
+          <div className="card-body prose !pb-0">
             <ListMonsters />
           </div>
+
           <div className="card-body">
+            <div className="divider m-0" />
             <AddMonster />
           </div>
         </div>

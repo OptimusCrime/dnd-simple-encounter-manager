@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Footer } from './Footer';
 import { Header } from './Header';
 
 interface WrapperProps {
@@ -7,12 +8,11 @@ interface WrapperProps {
 }
 
 export const Wrapper = ({ children }: WrapperProps) => (
-  <div className="container max-w-none mb-16">
-    <div className="container max-w-none bg-neutral">
-      <div className="container">
-        <Header />
-      </div>
-    </div>
+  <div className="container max-w-none">
+    <Header />
+
     <div className="container mx-auto">{children}</div>
+
+    <Footer />
   </div>
 );

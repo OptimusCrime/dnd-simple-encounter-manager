@@ -32,8 +32,8 @@ const mapMonsterToEncounterEntity = (entity: Monster): InitiativeEntityState => 
     startHealth,
     initialDamageTaken: 0,
     isPlayerCharacter: false,
-    isSurprised: false,
     initiative: null,
+    notes: entity.notes,
   };
 };
 
@@ -44,6 +44,6 @@ const mapCharacterToEncounterEntity = (name: string): InitiativeEntityState => (
   startHealth: null,
   initialDamageTaken: null,
   isPlayerCharacter: true,
-  isSurprised: false,
   initiative: null,
+  notes: null,
 });

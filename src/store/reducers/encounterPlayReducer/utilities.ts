@@ -1,26 +1,5 @@
 import { InitiativeEntityState } from '../../../pages/EncounterInitiative/types';
-
-export const getName = (entity: InitiativeEntityState, entities: InitiativeEntityState[]) => {
-  if (entity.isPlayerCharacter) {
-    return entity.name;
-  }
-
-  // Check for identical names
-  const entitiesWithSameName = entities.filter((e) => e.name === entity.name);
-  if (entitiesWithSameName.length === 1) {
-    return entity.name;
-  }
-
-  // Multiple names, find out current order
-  const index = entities.findIndex((e) => e.order === entity.order);
-
-  // I guess this can never happen, but who cares
-  if (index === -1) {
-    return entity.name;
-  }
-
-  return `${entity.name} #${index + 1}`;
-};
+import { EncounterPlayEntity, LogMessage } from './types';
 
 export const calculateCurrentHealth = (entity: InitiativeEntityState): number | null => {
   if (entity.isPlayerCharacter) {
@@ -32,4 +11,41 @@ export const calculateCurrentHealth = (entity: InitiativeEntityState): number | 
   }
 
   return entity.startHealth - entity.initialDamageTaken;
+};
+
+export const createLogMessage = (entity: EncounterPlayEntity, change: number): LogMessage[] => {
+  const messages: LogMessage[] = [];
+  const name = `${entity.name} (${entity.number})`;
+  if (entity.healthCurrent === null) {
+    return [];
+  }
+
+  const oldHp = entity.healthCurrent;
+  const newHp = entity.healthCurrent + change;
+
+  if (change < 0) {
+    messages.push({
+      text: `${name} lost ${Math.abs(change)}HP from ${oldHp}HP to ${newHp}HP.`,
+      className: 'text-error',
+    });
+
+    if (newHp <= 0 && oldHp > 0) {
+      messages.push({
+        text: `${name} is dead.`,
+        className: 'text-error',
+      });
+    }
+  } else {
+    messages.push({
+      text: `${name} gained ${Math.abs(change)}HP from ${oldHp}HP to ${newHp}HP.`,
+    });
+
+    if (newHp > 0 && oldHp <= 0) {
+      messages.push({
+        text: `${name} is alive again.`,
+      });
+    }
+  }
+
+  return messages;
 };

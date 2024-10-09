@@ -10,4 +10,5 @@ export interface Monster {
   id: string;
   name: string;
   startHealth: number | null;
+  notes: string | null;
 }

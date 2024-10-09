@@ -18,14 +18,15 @@ export enum Condition {
 
 export interface EncounterPlayEntity {
   id: string;
+  number: number;
   name: string;
   initiativeThrow: number | null;
   healthStart: number | null;
   healthCurrent: number | null;
   isPlayerCharacter: boolean;
-  isSurprised: boolean;
   isDead: boolean;
   conditions: Condition[];
+  notes: string | null;
 }
 
 interface EffectBase {
@@ -37,7 +38,7 @@ interface EffectBase {
 
 export interface EffectProgress {
   type: 'progress';
-  startedWith: string;
+  anchor: string;
   duration: number;
   progress: number;
   actualProgress: number;
@@ -46,6 +47,11 @@ export interface EffectProgress {
 
 export interface EffectLasting {
   type: 'lasting';
+}
+
+export interface LogMessage {
+  text: string;
+  className?: string;
 }
 
 export type EncounterPlayEffect = EffectBase & (EffectProgress | EffectLasting);

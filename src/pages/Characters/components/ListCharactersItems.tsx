@@ -5,18 +5,18 @@ import { removeCharacter } from '../../../store/reducers/characterReducer';
 import { CharacterSet } from '../../../store/reducers/characterReducer/types';
 
 interface ListCharactersItemsProps {
-  set: CharacterSet;
+  currentSet: CharacterSet;
 }
 export const ListCharactersItems = (props: ListCharactersItemsProps) => {
   const dispatch = useAppDispatch();
 
-  const { set } = props;
+  const { currentSet } = props;
 
-  if (set.characters.length === 0) {
+  if (currentSet.characters.length === 0) {
     return <p className="prose-md">No characters in set.</p>;
   }
 
-  const { characters, id } = set;
+  const { characters, id } = currentSet;
 
   return (
     <ul className="list-none p-0">

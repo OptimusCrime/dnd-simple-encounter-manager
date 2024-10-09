@@ -15,7 +15,10 @@ export const Dropdown = (props: DropdownProps) => {
       <label tabIndex={0} className={cx('btn', className ?? '')} onClick={onOpen}>
         {text}
       </label>
-      <ul tabIndex={0} className="dropdown-content z-[1] menu p-4 bg-base-100 shadow rounded-box w-52">
+      <ul
+        tabIndex={0}
+        className="dropdown-content z-[1] menu p-4 bg-base-100 shadow rounded-box w-52 border border-base-content"
+      >
         {children}
       </ul>
     </div>

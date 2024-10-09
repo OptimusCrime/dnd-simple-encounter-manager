@@ -1,19 +1,19 @@
 import React from 'react';
 
-import { useAppDispatch } from '../../../store/hooks';
-import { removeCharacterSet } from '../../../store/reducers/characterReducer';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { removeCharacterSet, selectCharacterSet } from '../../../store/reducers/characterReducer';
 import { CharacterSet } from '../../../store/reducers/characterReducer/types';
+import { ReducerNames } from '../../../store/reducers/reducerNames';
 
 interface ListCharactersDropdownProps {
-  setCurrentSet: (value: CharacterSet) => void;
-  currentSet: CharacterSet | null;
-  sets: CharacterSet[];
+  currentSet: CharacterSet;
 }
 
 export const ListCharactersSetSelectPanel = (props: ListCharactersDropdownProps) => {
+  const { sets } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
   const dispatch = useAppDispatch();
 
-  const { sets, currentSet, setCurrentSet } = props;
+  const { currentSet } = props;
 
   return (
     <div className="flex items-end w-full justify-between">
@@ -28,9 +28,9 @@ export const ListCharactersSetSelectPanel = (props: ListCharactersDropdownProps)
             if (!set) {
               return;
             }
-            setCurrentSet(set);
+            dispatch(selectCharacterSet(set.id));
           }}
-          defaultValue={sets[0].id}
+          defaultValue={currentSet.id}
         >
           {sets.map((set) => (
             <option value={set.id} key={set.id}>
@@ -39,24 +39,24 @@ export const ListCharactersSetSelectPanel = (props: ListCharactersDropdownProps)
           ))}
         </select>
       </div>
-      {currentSet !== null && (
-        <div>
-          <button
-            className="btn btn-error"
-            onClick={() => {
-              dispatch(removeCharacterSet(currentSet.id));
+      <div>
+        <button
+          className="btn btn-error"
+          onClick={() => {
+            dispatch(removeCharacterSet(currentSet.id));
 
-              // If possible, set another character set as the default one
-              const anotherSet = sets.find((set) => set.id !== currentSet.id);
-              if (anotherSet) {
-                setCurrentSet(anotherSet);
-              }
-            }}
-          >
-            Delete character set
-          </button>
-        </div>
-      )}
+            // If possible, set another character set as the default one
+            const anotherSet = sets.find((set) => set.id !== currentSet.id);
+            if (anotherSet) {
+              dispatch(selectCharacterSet(anotherSet.id));
+            } else {
+              dispatch(selectCharacterSet(null));
+            }
+          }}
+        >
+          Delete character set
+        </button>
+      </div>
     </div>
   );
 };

@@ -1,8 +1,8 @@
-import cx from 'classnames';
 import React, { useState } from 'react';
 
 import { Heading } from '../../components';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { CharacterSet } from '../../store/reducers/characterReducer/types';
 import { beginEncounter } from '../../store/reducers/encounterPlayReducer';
 import { Page, setPage } from '../../store/reducers/globalReducer';
 import { ReducerNames } from '../../store/reducers/reducerNames';
@@ -11,14 +11,27 @@ import { mapEncounterToInitiativeState } from './mappers';
 import { InitiativeEntityState, InitiativeMoveDirection } from './types';
 import { calculatePlacementSwapValues, sortEntitiesByInitiative } from './utilities';
 
+const getSet = (sets: CharacterSet[], selectedSet: string | null): CharacterSet | null => {
+  if (sets.length === 0) {
+    return null;
+  }
+
+  if (selectedSet === null) {
+    return sets[0];
+  }
+
+  const set = sets.find((set) => set.id === selectedSet);
+  return set ?? null;
+};
+
 export const EncounterInitiative = () => {
   const dispatch = useAppDispatch();
 
   const { encounters, selectedEncounter } = useAppSelector((state) => state[ReducerNames.ENCOUNTERS]);
-  const { sets } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
+  const { selectedSet, sets } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
 
   const encounter = encounters.find((encounter) => encounter.id === selectedEncounter) ?? null;
-  const defaultSet = sets.length === 0 ? null : sets[0];
+  const defaultSet = getSet(sets, selectedSet);
 
   const [hasSorted, setHasSorted] = useState<boolean>(false);
   const [state, setState] = useState<InitiativeEntityState[]>(
@@ -102,25 +115,6 @@ export const EncounterInitiative = () => {
 
                     <div className="pl-8 w-64 block">
                       <InitialDamageTakenInputField entity={entity} key={idx} updateState={updateState} />
-                    </div>
-
-                    <div className="flex flex-row ml-16">
-                      <div className="form-control">
-                        <label className="label cursor-pointer">
-                          <span className="label-text text-lg mr-4">Surprised</span>
-                          <input
-                            type="checkbox"
-                            className={cx('toggle', entity.isSurprised ? 'toggle-warning' : '')}
-                            defaultChecked={entity.isSurprised}
-                            tabIndex={-1}
-                            onChange={(event) => {
-                              updateState(entity.id, {
-                                isSurprised: event.target.checked,
-                              });
-                            }}
-                          />
-                        </label>
-                      </div>
                     </div>
                   </div>
                 </div>

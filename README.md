@@ -2,6 +2,10 @@
 
 Simple tool to help you run Dungeons and Dragons encounters. Kept purposefully simple.
 
-## How to use
+## Online version
 
 https://optimuscrime.github.io/dnd-simple-encounter-manager/
+
+## Screenshot
+
+![Screenshot of an encounter](docs/screenshot.png)

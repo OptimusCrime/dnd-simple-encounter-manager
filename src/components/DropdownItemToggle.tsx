@@ -13,8 +13,8 @@ export const DropdownItemToggle = (props: DropdownItemToggleProps) => {
   const className = checked ? 'bg-base-300' : '';
 
   return (
-    <li className={cx('rounded', className)}>
-      <a onClick={onClick} className="rounded no-underline">
+    <li>
+      <a onClick={onClick} className={cx('rounded no-underline py-2 my-1', className)} role="menuitem">
         {children}
       </a>
     </li>

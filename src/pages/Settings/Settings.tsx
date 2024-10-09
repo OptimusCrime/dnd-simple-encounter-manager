@@ -19,6 +19,7 @@ export const Settings = () => {
         break;
       case CacheDeleteTarget.ENCOUNTERS:
         deleteKey(ReducerNames.ENCOUNTERS);
+        deleteKey(ReducerNames.ENCOUNTER_PLAY);
         break;
       case CacheDeleteTarget.ALL:
         deleteKey(ReducerNames.GLOBAL);

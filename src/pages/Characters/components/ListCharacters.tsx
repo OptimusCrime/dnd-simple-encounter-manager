@@ -1,35 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
+import { useAppSelector } from '../../../store/hooks';
 import { CharacterSet } from '../../../store/reducers/characterReducer/types';
+import { ReducerNames } from '../../../store/reducers/reducerNames';
 import { ListCharactersItems } from './ListCharactersItems';
 import { ListCharactersSetSelectPanel } from './ListCharactersSetSelectPanel';
 import { NewCharacter } from './NewCharacter';
 
-interface ListCharactersProps {
-  sets: CharacterSet[];
-  defaultSet: CharacterSet | null;
-}
+const getSet = (sets: CharacterSet[], currentSetId: string | null): CharacterSet => {
+  const currentSet = sets.find((set) => set.id === currentSetId);
+  if (!currentSet) {
+    return sets[0];
+  }
 
-export const ListCharacters = (props: ListCharactersProps) => {
-  const { sets, defaultSet } = props;
+  return currentSet;
+};
 
-  const [currentSet, setCurrentSet] = useState<CharacterSet | null>(defaultSet);
+export const ListCharacters = () => {
+  const { selectedSet, sets } = useAppSelector((state) => state[ReducerNames.CHARACTERS]);
 
-  useEffect(() => {
-    setCurrentSet(defaultSet);
-  }, [defaultSet]);
-
-  if (sets.length === 0 || currentSet === null) {
+  if (sets.length === 0) {
     return <p className="prose-md">No sets added.</p>;
   }
 
+  const currentSet = getSet(sets, selectedSet);
+
   return (
     <div className="flex flex-col space-y-4">
-      <ListCharactersSetSelectPanel setCurrentSet={setCurrentSet} sets={sets} currentSet={currentSet} />
+      <ListCharactersSetSelectPanel currentSet={currentSet} />
 
-      <ListCharactersItems set={currentSet} />
+      <ListCharactersItems currentSet={currentSet} />
 
-      <NewCharacter setId={currentSet.id} />
+      <NewCharacter currentSetId={currentSet.id} />
     </div>
   );
 };

@@ -1,22 +1,23 @@
 import { InitiativeEntityState } from '../../../pages/EncounterInitiative/types';
 import { EncounterPlayEntity } from './types';
-import { calculateCurrentHealth, getName } from './utilities';
+import { calculateCurrentHealth } from './utilities';
 
 export const mapInitiativeEntityStateToEncounterPlayEntity = (
   entity: InitiativeEntityState,
-  entities: InitiativeEntityState[],
+  index: number,
 ): EncounterPlayEntity => {
   const healthCurrent = calculateCurrentHealth(entity);
 
   return {
     id: entity.id,
-    name: getName(entity, entities),
+    name: entity.name,
+    number: index + 1,
     initiativeThrow: entity.initiative,
     healthStart: entity.startHealth,
     healthCurrent: healthCurrent,
     isPlayerCharacter: entity.isPlayerCharacter,
-    isSurprised: entity.isSurprised,
     isDead: healthCurrent !== null && healthCurrent < 0,
     conditions: [],
+    notes: entity.notes,
   };
 };

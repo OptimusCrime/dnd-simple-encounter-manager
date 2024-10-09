@@ -12,4 +12,5 @@ export interface AddMonsterPayload {
   name: string;
   startHealth: string;
   clones: number;
+  notes: string | null;
 }

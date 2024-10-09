@@ -9,6 +9,7 @@ import { mapInitiativeEntityStateToEncounterPlayEntity } from './mappers';
 import { AddEffectType } from './reducerTypes';
 import { getInitialState } from './state';
 import { Condition } from './types';
+import { createLogMessage } from './utilities';
 
 const encounterPlayReducer = createSlice({
   name: ReducerNames.ENCOUNTER_PLAY,
@@ -21,13 +22,15 @@ const encounterPlayReducer = createSlice({
      * @param action
      */
     beginEncounter(state, action: PayloadAction<{ name: string; entities: InitiativeEntityState[] }>) {
-      state.name = action.payload.name;
+      state.turnStart = Date.now();
       state.round = 0;
+      state.name = action.payload.name;
       state.currentTurn = action.payload.entities[0].id;
       state.entities = action.payload.entities
         .sort((a, b) => a.order - b.order)
-        .map((entity) => mapInitiativeEntityStateToEncounterPlayEntity(entity, action.payload.entities));
+        .map((entity, idx) => mapInitiativeEntityStateToEncounterPlayEntity(entity, idx));
       state.effects = [];
+      state.logs = [];
     },
 
     /**
@@ -37,6 +40,11 @@ const encounterPlayReducer = createSlice({
      * @param action
      */
     updateHealth(state, action: PayloadAction<{ id: string; change: number }>) {
+      const entity = state.entities.find((entity) => entity.id === action.payload.id);
+      if (entity) {
+        state.logs = [...state.logs, ...createLogMessage(entity, action.payload.change)];
+      }
+
       state.entities = state.entities.map((entity) => {
         if (entity.id !== action.payload.id) {
           return entity;
@@ -62,17 +70,6 @@ const encounterPlayReducer = createSlice({
      * @param state
      */
     nextRound(state) {
-      state.entities = state.entities.map((entity) => {
-        if (entity.id !== state.currentTurn) {
-          return entity;
-        }
-
-        return {
-          ...entity,
-          isSurprised: false,
-        };
-      });
-
       const queue = new InitiativeQueue(state.entities);
 
       const nextTurnResponse = queue.findNextTurn(state.currentTurn);
@@ -88,7 +85,7 @@ const encounterPlayReducer = createSlice({
           return effect;
         }
 
-        const increaseProgress = passed.includes(effect.startedWith);
+        const increaseProgress = passed.includes(effect.anchor);
 
         if (!increaseProgress) {
           return effect;
@@ -117,6 +114,8 @@ const encounterPlayReducer = createSlice({
       if (current.isFirstElement) {
         state.round++;
       }
+
+      state.turnStart = Date.now();
     },
 
     /**
@@ -147,7 +146,7 @@ const encounterPlayReducer = createSlice({
           return effect;
         }
 
-        const increaseProgress = passed.includes(effect.startedWith);
+        const increaseProgress = passed.includes(effect.anchor);
 
         if (!increaseProgress || !effect.initialRoundPassed) {
           return effect;
@@ -171,6 +170,8 @@ const encounterPlayReducer = createSlice({
           active: actualProgress <= effect.duration,
         };
       });
+
+      state.turnStart = Date.now();
     },
 
     /**
@@ -220,7 +221,7 @@ const encounterPlayReducer = createSlice({
           id: nanoid(),
           type: 'progress',
           name: action.payload.name,
-          startedWith: action.payload.startedWith,
+          anchor: action.payload.anchor,
           active: true,
           initialRoundPassed: false,
           // Each round in combat takes 6 seconds. An effect lasting 60 seconds lasts for 10 rounds
@@ -264,7 +265,6 @@ const encounterPlayReducer = createSlice({
 
         return {
           ...effect,
-          startedWith: state.currentTurn,
           progress: 0,
           actualProgress: 0,
           initialRoundPassed: false,
@@ -298,7 +298,7 @@ const encounterPlayReducer = createSlice({
      * @param state
      * @param action
      */
-    addOrDeleteAffected(
+    addOrDeleteEffectAffected(
       state,
       action: PayloadAction<{ id: string; affected: { id: string; name: string; enabled: boolean } }>,
     ) {
@@ -321,26 +321,47 @@ const encounterPlayReducer = createSlice({
       });
     },
 
+    changeEffectAnchor(state, action: PayloadAction<{ id: string; anchor: string }>) {
+      state.effects = state.effects.map((effect) => {
+        if (effect.id !== action.payload.id) {
+          return effect;
+        }
+
+        return {
+          ...effect,
+          anchor: action.payload.anchor,
+        };
+      });
+    },
+
     addNewMonster(state, action: PayloadAction<{ name: string; order: number; health: string }>) {
       const health = calculateHealth(action.payload.health);
 
       const newMonster = {
         id: nanoid(),
+
+        // Temp value, because I am lazy, and it is easier to map this after placing it in the correct spot
+        number: 0,
         name: action.payload.name,
         initiativeThrow: null,
         healthStart: health,
         healthCurrent: health,
         isPlayerCharacter: false,
-        isSurprised: false,
         isDead: health <= 0,
         conditions: [],
+        notes: null,
       };
 
-      state.entities = [
+      const newEntities = [
         ...state.entities.slice(0, action.payload.order - 1),
         newMonster,
         ...state.entities.slice(action.payload.order - 1),
       ];
+
+      state.entities = newEntities.map((entity, idx) => ({
+        ...entity,
+        number: idx + 1,
+      }));
     },
     setActiveConditionClicked(state, action: PayloadAction<Condition | null>) {
       state.clickedActiveCondition = action.payload;
@@ -358,7 +379,8 @@ export const {
   deleteEffect,
   resetEffect,
   updateEffectProgress,
-  addOrDeleteAffected,
+  addOrDeleteEffectAffected,
+  changeEffectAnchor,
   addNewMonster,
   setActiveConditionClicked,
 } = encounterPlayReducer.actions;
