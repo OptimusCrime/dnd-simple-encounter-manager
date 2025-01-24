@@ -10,5 +10,6 @@ export interface Monster {
   id: string;
   name: string;
   startHealth: number | null;
+  startHealthExpression: string | null;
   notes: string | null;
 }

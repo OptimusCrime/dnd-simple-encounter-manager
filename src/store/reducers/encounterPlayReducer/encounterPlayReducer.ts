@@ -23,6 +23,7 @@ const encounterPlayReducer = createSlice({
      */
     beginEncounter(state, action: PayloadAction<{ name: string; entities: InitiativeEntityState[] }>) {
       state.turnStart = Date.now();
+      state.encounterStart = Date.now();
       state.round = 0;
       state.name = action.payload.name;
       state.currentTurn = action.payload.entities[0].id;

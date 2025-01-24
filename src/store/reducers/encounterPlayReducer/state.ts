@@ -4,6 +4,7 @@ import { Condition, EncounterPlayEffect, EncounterPlayEntity, LogMessage } from 
 
 interface EncounterPlayState {
   turnStart: number;
+  encounterStart: number;
   name: string;
   round: number;
   currentTurn: string;
@@ -15,6 +16,7 @@ interface EncounterPlayState {
 
 const fallbackInitialState: EncounterPlayState = {
   turnStart: 0,
+  encounterStart: 0,
   name: '',
   currentTurn: '',
   round: 1,

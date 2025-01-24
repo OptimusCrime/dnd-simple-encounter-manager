@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { removeMonster, selectEncounter } from '../../../store/reducers/encountersReducer';
+import { duplicateMonster, removeMonster, selectEncounter } from '../../../store/reducers/encountersReducer';
 import { Page, setPage } from '../../../store/reducers/globalReducer';
 import { ReducerNames } from '../../../store/reducers/reducerNames';
 
@@ -42,7 +42,22 @@ export const ListMonsters = () => {
                 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" />
               </svg>
             </button>
-            <span>{`${monster.name} (${monster.startHealth} HP)`}</span>
+
+            <button
+              className="btn btn-sm btn-circle btn-outline btn-ghost my-0 mr-4"
+              onClick={() => dispatch(duplicateMonster(monster.id))}
+            >
+              <svg
+                className="w-5 h-5 fill-info hover:fill-base-100"
+                focusable="false"
+                aria-hidden="true"
+                viewBox="0 0 256 256"
+              >
+                <path d="M184,64H40a8,8,0,0,0-8,8V216a8,8,0,0,0,8,8H184a8,8,0,0,0,8-8V72A8,8,0,0,0,184,64Zm-8,144H48V80H176ZM224,40V184a8,8,0,0,1-16,0V48H72a8,8,0,0,1,0-16H216A8,8,0,0,1,224,40Z"></path>
+              </svg>
+            </button>
+
+            <span>{`${monster.name} (${monster.startHealth} HP - ${monster.startHealthExpression})`}</span>
           </div>
         </li>
       ))}

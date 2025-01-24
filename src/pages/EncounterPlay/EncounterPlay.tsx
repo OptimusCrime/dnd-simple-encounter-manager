@@ -4,7 +4,7 @@ import { Heading } from '../../components';
 import { useAppSelector } from '../../store/hooks';
 import { ReducerNames } from '../../store/reducers/reducerNames';
 import { EffectsPanel, Entity, LogPanel, SideControlsPanel } from './components';
-import { TurnCounter } from './components/TurnCounter';
+import { EncounterTimer } from './components/EncounterTimer';
 
 export const EncounterPlay = () => {
   const { entities, currentTurn, round, name } = useAppSelector((state) => state[ReducerNames.ENCOUNTER_PLAY]);
@@ -16,11 +16,11 @@ export const EncounterPlay = () => {
       <div className="flex flex-row items-center">
         <Heading text={`${name} [round: ${round + 1}]`} />
         <div className="pl-4">
-          <TurnCounter />
+          <EncounterTimer />
         </div>
       </div>
       <div className="flex flex-row space-x-8">
-        <div className="w-4/6 flex flex-col space-y-4">
+        <div className="w-4/6 flex flex-col space-y-6">
           {entities.map((entity) => (
             <Entity key={entity.id} entity={entity} currentTurn={currentTurn} effects={effects} />
           ))}

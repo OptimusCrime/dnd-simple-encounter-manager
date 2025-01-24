@@ -80,29 +80,28 @@ export const Entity = (props: EntityProps) => {
             </div>
           </div>
 
-          <div className="divider my-2" />
+          {(hasEffectsOrConditions || entity.notes !== null) && (
+            <>
+              {hasEffectsOrConditions && (
+                <>
+                  <div className="divider my-2" />
+                  <ActiveConditionDescriptionModal />
+                  <div className="flex bg-base-100 p-4 rounded-lg border-neutral-content/30 border-2">
+                    <ConditionsAndEffectsPanel effects={effectsForEntity} conditions={conditionsForEntity} />
+                  </div>
+                </>
+              )}
 
-          <ActiveConditionDescriptionModal />
-
-          <div className="w-full flex flex-row justify-between px-4">
-            {hasEffectsOrConditions ? (
-              <>
-                <div className="flex flex-row w-[40%]">
-                  <ConditionsAndEffectsPanel effects={effectsForEntity} conditions={conditionsForEntity} />
-                </div>
-                {entity.notes !== null && (
-                  <>
-                    <div className="flex w-[60%]">
-                      <div className="divider divider-horizontal" />
-                    </div>
+              {entity.notes !== null && (
+                <>
+                  <div className="divider my-2" />
+                  <div className="flex bg-base-100 p-4 rounded-lg border-neutral-content/30 border-2">
                     <Notes entity={entity} />
-                  </>
-                )}
-              </>
-            ) : (
-              <Notes entity={entity} />
-            )}
-          </div>
+                  </div>
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </div>

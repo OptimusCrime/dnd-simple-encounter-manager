@@ -1,3 +1,13 @@
+v2.1.0-pl                      2025-01-24
+=========================================
+
+- [Feature] Timer for the whole encounter (in addition to active turn).
+- [Feature] Make it possible to clone a monster before starting encounter (reuses dynamic health formula if provided).
+- [Improvement] Re-arranged the sections for notes and conditions/effects to stand out more.
+- [Improvement] Dropdown for conditions takes more horizontal space for improved usability.
+- [Improvement] Unified how name and turn number is formatted, so that it looks the same everywhere.
+- [Fix] Footer should be positioned correctly now (hopefully).
+
 v2.0.0-pl                      2024-10-09
 =========================================
 

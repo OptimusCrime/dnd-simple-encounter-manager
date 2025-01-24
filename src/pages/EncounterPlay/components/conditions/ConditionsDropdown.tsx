@@ -14,7 +14,7 @@ export const ConditionsDropdown = (props: ConditionsDropdownProps) => {
   const { entity } = props;
 
   return (
-    <Dropdown text="Conditions">
+    <Dropdown text="Conditions" dropdownClassName="grid grid-cols-5 gap-2 !w-[750px]">
       {conditions.map((condition) => (
         <ConditionsDropdownItem key={condition} entity={entity} condition={condition as keyof typeof Condition} />
       ))}

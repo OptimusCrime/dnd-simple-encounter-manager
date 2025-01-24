@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
 
 import { ReducerNames } from '../reducerNames';
-import { mapNewMonster } from './mappers';
+import { mapDuplicateMonster, mapNewMonster } from './mappers';
 import { AddMonsterPayload } from './reducerTypes';
 import { getInitialState } from './state';
 
@@ -125,6 +125,30 @@ const encountersReducer = createSlice({
     },
 
     /**
+     * Duplicates a monster already present in the monster list of the encounter.
+     *
+     * @param state
+     * @param action
+     */
+    duplicateMonster(state, action: PayloadAction<string>) {
+      state.encounters = state.encounters.map((encounter) => {
+        if (state.selectedEncounter !== encounter.id) {
+          return encounter;
+        }
+
+        const monster = encounter.monsters.find((monster) => monster.id === action.payload);
+        if (!monster) {
+          return encounter;
+        }
+
+        return {
+          ...encounter,
+          monsters: [...encounter.monsters, mapDuplicateMonster(monster)],
+        };
+      });
+    },
+
+    /**
      * Remove a monster from the encounter.
      *
      * @param state
@@ -155,6 +179,7 @@ export const {
   updateEncounterReady,
 
   addMonster,
+  duplicateMonster,
   removeMonster,
 } = encountersReducer.actions;
 

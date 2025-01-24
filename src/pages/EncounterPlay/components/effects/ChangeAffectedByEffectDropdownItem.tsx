@@ -33,7 +33,7 @@ export const ChangeAffectedByEffectDropdownItem = (props: ChangeAffectedByEffect
 
   return (
     <DropdownItemToggle checked={checked} onClick={onClick}>
-      {entity.name} {entity.number}
+      {entity.name} ({entity.number})
     </DropdownItemToggle>
   );
 };

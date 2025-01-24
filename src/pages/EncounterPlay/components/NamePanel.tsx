@@ -14,7 +14,7 @@ export const NamePanel = (props: NamePanelProps) => {
       <div>
         <span className="text-base">
           <strong>
-            {entity.name} &ndash; {entity.number}
+            {entity.name} ({entity.number})
           </strong>
         </span>
       </div>

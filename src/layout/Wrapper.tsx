@@ -9,10 +9,10 @@ interface WrapperProps {
 
 export const Wrapper = ({ children }: WrapperProps) => (
   <div className="container max-w-none">
-    <Header />
-
-    <div className="container mx-auto">{children}</div>
-
+    <div className="min-h-[calc(100vh-84px)]">
+      <Header />
+      <div className="container mx-auto">{children}</div>
+    </div>
     <Footer />
   </div>
 );

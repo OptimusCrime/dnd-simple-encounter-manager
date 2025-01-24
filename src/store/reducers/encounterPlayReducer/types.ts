@@ -12,7 +12,7 @@ export enum Condition {
   PRONE = 'Prone',
   RESTRAINED = 'Restrained',
   STUNNED = 'Stunned',
-  UNCONSCIOUS_OR_SLEEPING = 'Unconscious/Sleeping',
+  UNCONSCIOUS_OR_SLEEPING = 'Unconscious',
   EXHAUSTION = 'Exhaustion',
 }
 
